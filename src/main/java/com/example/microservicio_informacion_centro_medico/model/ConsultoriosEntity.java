@@ -17,13 +17,13 @@ import lombok.Setter;
 public class ConsultoriosEntity {
     @Id
     @Column(name = "id_consultorio")
-    private int id_consultorio;
+    private int idConsultorio;
     @Column(name = "nombre")
-    private int nombre;
+    private String nombre;
     @Column(name = "direccion")
-    private int direccion;
+    private String direccion;
     @Column(name = "equipamiento")
-    private int equipamiento;
+    private String equipamiento;
     @Column(name = "id_especialidad")
     private int idEspecialidad;
 }

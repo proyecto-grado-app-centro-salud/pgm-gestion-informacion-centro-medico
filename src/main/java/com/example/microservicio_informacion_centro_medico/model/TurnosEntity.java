@@ -21,7 +21,7 @@ public class TurnosEntity {
     @Column(name = "id_turno")
     private int idTurno;
     @Column(name = "nombre")
-    private int nombre;
+    private String nombre;
     @Column(name = "hora_inicio")
     private Time horaInicio;
     @Column(name = "hora_fin")

@@ -27,4 +27,11 @@ public class EspecialidadesEntity {
     private String descripcion;
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
+    @Column(name = "requisitos_solicitud_ficha_medica")
+    private Date requisitosSolicitudFichaMedica;
+    @Column(name = "requisitos_minimos_atencion_consulta_externa")
+    private Date requisitosMinimosAtencionConsultaExterna;
+    @Column(name = "procedimiento_obtencion_ficha_medica_presencial")
+    private Date procedimientoObtencionFichaMedicaPresencial;
+    
 }

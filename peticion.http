@@ -1,0 +1,34 @@
+###
+GET http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/consultorios
+
+###
+GET http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/especialidades
+
+###
+GET http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/turnos
+###
+GET http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/medicos
+
+
+# Turnos de atencion medica----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+###
+POST http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/horarios-atencion-medica
+Content-Type: application/json
+
+{
+    "idConsultorio":2,
+    "idMedico":1,
+    "idTurno":1,
+    "numeroFichasDisponible":4,
+    "fecha":"2024-10-10"
+}
+
+###
+DELETE http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/horarios-atencion-medica/40
+
+###
+GET http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/horarios-atencion-medica
+
+###
+GET http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/horarios-atencion-medica/1
