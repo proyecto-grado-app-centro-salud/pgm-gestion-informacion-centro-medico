@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.microservicio_informacion_centro_medico.model.HorariosAtencionMedicaEntity;
 import com.example.microservicio_informacion_centro_medico.repository.HorariosAtencionMedicaRepositoryJPA;
+import com.example.microservicio_informacion_centro_medico.util.ApiResponse;
 
 
 @RestController
@@ -37,9 +38,9 @@ public class HorariosAtencionMedicaController {
     //     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Horario atencion no encontrado"));
     // }
     @DeleteMapping("/{idHorariosAtencionMedica}")
-    public String eliminarHorarioAtencion(@PathVariable int idHorariosAtencionMedica){ 
+    public @ResponseBody ApiResponse eliminarHorarioAtencion(@PathVariable int idHorariosAtencionMedica){ 
         horariosAtencionMedicaRepositoryJPA.deleteById(idHorariosAtencionMedica);
-        return "OK";
+        return new ApiResponse("OK", "Horario de atención eliminado correctamente.");
     }
     // @GetMapping()
     // public @ResponseBody List<HorariosAtencionMedicaEntity> obtenerHorariosAtencion(){ 
