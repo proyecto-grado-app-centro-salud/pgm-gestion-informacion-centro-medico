@@ -2,7 +2,7 @@ FROM openjdk:17-jdk-alpine
 
 VOLUME /tmp
 
-EXPOSE 8082
+EXPOSE 8088
 
 ADD target/*.jar app.jar
 

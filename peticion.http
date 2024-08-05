@@ -7,6 +7,9 @@ GET http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/es
 ###
 GET http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/turnos
 ###
+GET http://gestion-consultas-externas.cr4u2s88axmq.us-east-1.rds.amazonaws.com/api/microservicio-gestion-informacion-centro-medico/turnos
+
+###
 GET http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/medicos
 
 
@@ -21,16 +24,16 @@ Content-Type: application/json
     "idMedico":1,
     "idTurno":1,
     "numeroFichasDisponible":4,
-    "fecha":"2024-10-10"
+    "fecha":"2024-06-14"
 }
 
 ###
-DELETE http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/horarios-atencion-medica/40
+DELETE http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/horarios-atencion-medica/6
 
 ###
 GET http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/horarios-atencion-medica
 
 ###
-GET http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/horarios-atencion-medica/1ç
+GET http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/horarios-atencion-medica/1
 ###
 GET http://localhost:8088/api/microservicio-gestion-informacion-centro-medico/horarios-atencion-medica/
