@@ -5,19 +5,26 @@ import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "especialidades")
-public class EspecialidadesEntity {
+public class EspecialidadesEntity{
     @Id
     @Column(name = "id_especialidad")
     private int idEspecialidad;
@@ -27,11 +34,31 @@ public class EspecialidadesEntity {
     private String descripcion;
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
-    @Column(name = "requisitos_solicitud_ficha_medica")
-    private Date requisitosSolicitudFichaMedica;
-    @Column(name = "requisitos_minimos_atencion_consulta_externa")
-    private Date requisitosMinimosAtencionConsultaExterna;
-    @Column(name = "procedimiento_obtencion_ficha_medica_presencial")
-    private Date procedimientoObtencionFichaMedicaPresencial;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "deleted_at")
+    private Date deletedAt;
+
     
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+        updatedAt = new Date();
+    }
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
+    public void markAsDeleted() {
+        deletedAt = new Date();
+    }
+
 }
