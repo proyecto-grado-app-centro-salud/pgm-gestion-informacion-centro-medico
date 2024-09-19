@@ -3,17 +3,29 @@ package com.example.microservicio_informacion_centro_medico.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.example.microservicio_informacion_centro_medico.model.ConsultoriosEntity;
-import com.example.microservicio_informacion_centro_medico.repository.ConsultoriosRepositoryJPA;
+import com.example.microservicio_informacion_centro_medico.model.ConsultorioEntity;
+import com.example.microservicio_informacion_centro_medico.model.dtos.ConsultorioDto;
+import com.example.microservicio_informacion_centro_medico.services.ConsultoriosService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @RestController
@@ -22,12 +34,50 @@ import com.example.microservicio_informacion_centro_medico.repository.Consultori
 public class ConsultoriosController {
 
     @Autowired
-    ConsultoriosRepositoryJPA consultoriosRepositoryJPA;
+    ConsultoriosService consultoriosService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping()
-    public List<Object> getConsultorios() {
-        return consultoriosRepositoryJPA.obtenerConsultorios();
-        //return Collections.emptyList();
+    public ResponseEntity<List<ConsultorioDto>> getConsultorios() {
+        return new ResponseEntity<List<ConsultorioDto>>(consultoriosService.obtenerConsultorios(),HttpStatus.OK);
     }
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ConsultorioDto> getConsultorioById(@PathVariable int id) {
+        ConsultorioDto consultorioDto = consultoriosService.obtenerConsultorioPorId(id);
+        if (consultorioDto != null) {
+            return new ResponseEntity<>(consultorioDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping()
+    public ResponseEntity<ConsultorioDto> createConsultorio(@RequestParam("data") String data,
+    @RequestParam Map<String, MultipartFile> allFiles) {
+        try{
+            ConsultorioDto consultorioDto=objectMapper.readValue(data, ConsultorioDto.class);
+            ConsultorioDto createdConsultorio = consultoriosService.crearConsultorio(consultorioDto,allFiles);
+            return new ResponseEntity<>(createdConsultorio, HttpStatus.OK);
     
+        }catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ConsultorioDto> updateConsultorio(@PathVariable int id, @RequestBody ConsultorioDto consultorioDto) {
+        ConsultorioDto updatedConsultorio = consultoriosService.actualizarConsultorio(id, consultorioDto);
+        if (updatedConsultorio != null) {
+            return new ResponseEntity<>(updatedConsultorio, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteConsultorio(@PathVariable int id) {
+        consultoriosService.eliminarConsultorio(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
