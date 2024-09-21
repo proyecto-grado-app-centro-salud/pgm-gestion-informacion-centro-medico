@@ -74,7 +74,7 @@ public class EspecialidadesController {
             EspecialidadDto updatedEspecialidad = especialidadesService.actualizarEspecialidad(id,especialidadDto,allFiles,params);
             return new ResponseEntity<>(updatedEspecialidad, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
