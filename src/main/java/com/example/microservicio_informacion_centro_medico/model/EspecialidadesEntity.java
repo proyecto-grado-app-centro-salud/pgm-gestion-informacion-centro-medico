@@ -4,6 +4,8 @@ import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -26,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "especialidades")
 public class EspecialidadesEntity{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_especialidad")
     private int idEspecialidad;
     @Column(name = "nombre")

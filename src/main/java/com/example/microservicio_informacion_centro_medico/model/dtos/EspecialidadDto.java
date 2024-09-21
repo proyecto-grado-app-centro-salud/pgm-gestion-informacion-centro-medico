@@ -22,7 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EspecialidadDto {
-    private int idEspecialidad;
+    private Integer idEspecialidad;
     private String nombre;
     private String descripcion;
     private Date fechaCreacion;

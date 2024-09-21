@@ -59,15 +59,7 @@ public class EspecialidadesController {
     @RequestParam Map<String, MultipartFile> allFiles) {
         try {
             EspecialidadDto especialidadDto = objectMapper.readValue(data, EspecialidadDto.class);
-            List<MultipartFile> imagenes = new ArrayList<>();
-            for (Map.Entry<String, MultipartFile> entry : allFiles.entrySet()) {
-                if (entry.getKey().startsWith("imagen")) {
-                    imagenes.add(entry.getValue());
-                    if (imagenes.size() == 3) break;
-                }
-            }
-            EspecialidadDto createdEspecialidad = especialidadesService.crearEspecialidad(especialidadDto, imagenes);
-
+            EspecialidadDto createdEspecialidad = especialidadesService.crearEspecialidad(especialidadDto, allFiles);
             return new ResponseEntity<>(createdEspecialidad, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -76,15 +68,11 @@ public class EspecialidadesController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<EspecialidadDto> updateEspecialidad(@PathVariable int id,@RequestParam("data") String data,
-    @RequestParam Map<String, MultipartFile|String> allFiles) {
+    @RequestParam Map<String, MultipartFile> allFiles,@RequestParam Map<String, String> params) {
         try {
             EspecialidadDto especialidadDto = objectMapper.readValue(data, EspecialidadDto.class);
-            EspecialidadDto updatedEspecialidad = especialidadesService.actualizarEspecialidad(id, especialidadDto,allFiles);
-            if (updatedEspecialidad != null) {
-                return new ResponseEntity<>(updatedEspecialidad, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+            EspecialidadDto updatedEspecialidad = especialidadesService.actualizarEspecialidad(id,especialidadDto,allFiles,params);
+            return new ResponseEntity<>(updatedEspecialidad, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -92,7 +80,11 @@ public class EspecialidadesController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteEspecialidad(@PathVariable int id) {
-        especialidadesService.deleteEspecialidad(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try{
+            especialidadesService.deleteEspecialidad(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
