@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.microservicio_informacion_centro_medico.model.ConsultorioEntity;
 import com.example.microservicio_informacion_centro_medico.model.dtos.ConsultorioDto;
+import com.example.microservicio_informacion_centro_medico.model.dtos.EspecialidadDto;
 import com.example.microservicio_informacion_centro_medico.services.ConsultoriosService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -40,7 +41,11 @@ public class ConsultoriosController {
 
     @GetMapping()
     public ResponseEntity<List<ConsultorioDto>> getConsultorios() {
-        return new ResponseEntity<List<ConsultorioDto>>(consultoriosService.obtenerConsultorios(),HttpStatus.OK);
+        try{
+            return new ResponseEntity<List<ConsultorioDto>>(consultoriosService.obtenerConsultorios(),HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
     @GetMapping(value = "/{id}")
     public ResponseEntity<ConsultorioDto> getConsultorioById(@PathVariable int id) {
@@ -61,23 +66,31 @@ public class ConsultoriosController {
             return new ResponseEntity<>(createdConsultorio, HttpStatus.OK);
     
         }catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ConsultorioDto> updateConsultorio(@PathVariable int id, @RequestBody ConsultorioDto consultorioDto) {
-        ConsultorioDto updatedConsultorio = consultoriosService.actualizarConsultorio(id, consultorioDto);
-        if (updatedConsultorio != null) {
+    public ResponseEntity<ConsultorioDto> updateConsultorio(@PathVariable int id, @RequestParam("data") String data,
+    @RequestParam Map<String, MultipartFile> allFiles,@RequestParam Map<String, String> params) {
+        try{
+            ConsultorioDto consultorioDto = objectMapper.readValue(data, ConsultorioDto.class);
+            ConsultorioDto updatedConsultorio = consultoriosService.actualizarConsultorio(id, consultorioDto,allFiles,params);
             return new ResponseEntity<>(updatedConsultorio, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+      
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteConsultorio(@PathVariable int id) {
-        consultoriosService.eliminarConsultorio(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            consultoriosService.eliminarConsultorio(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
     }
 }

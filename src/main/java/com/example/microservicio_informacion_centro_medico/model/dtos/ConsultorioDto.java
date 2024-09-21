@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Date;
+import java.util.List;
+
 
 import com.example.microservicio_informacion_centro_medico.model.ConsultorioEntity;
 
@@ -27,6 +29,7 @@ public class ConsultorioDto {
     private Date createdAt;
     private Date updatedAt;
     private Date deletedAt;
+    private List<ImagenDto> imagenes;
     public ConsultorioDto ObjectoAConsultorio(Object object){
         ConsultorioDto consultoriosDto=new ConsultorioDto();
         return consultoriosDto;
