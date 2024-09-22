@@ -49,10 +49,10 @@ public class ConsultoriosController {
     }
     @GetMapping(value = "/{id}")
     public ResponseEntity<ConsultorioDto> getConsultorioById(@PathVariable int id) {
-        ConsultorioDto consultorioDto = consultoriosService.obtenerConsultorioPorId(id);
-        if (consultorioDto != null) {
+        try {
+            ConsultorioDto consultorioDto = consultoriosService.obtenerConsultorioPorId(id);
             return new ResponseEntity<>(consultorioDto, HttpStatus.OK);
-        } else {
+        } catch(Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
