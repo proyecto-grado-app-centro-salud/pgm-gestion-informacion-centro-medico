@@ -26,10 +26,10 @@ public class ProcedimientosService {
     private ProcedimientosRepositoryJPA procedimientosRepositoryJPA;
 
     @Autowired
-    private ProcedimientosPasosRepositoryJPA procedimientosPasosRepositoryJPA;
+    private PasosProcedimientosService pasosProcedimientosService;
 
     @Autowired
-    private ProcedimientosRequisitosRepositoryJPA procedimientosRequisitosRepositoryJPA;
+    private RequisitosProcedimientosService requisitosProcedimientosService;
 
     @Autowired
     ImagenesService imagenesService;
@@ -41,6 +41,8 @@ public class ProcedimientosService {
             ProcedimientoDto procedimientoDto = new ProcedimientoDto().convertirProcedimientoEntityAProcedimientoDto(procedimientoEntity);
             List<ImagenDto> imagenes = imagenesService.obtenerImagenes("procedimientos", procedimientoEntity.getIdProcedimiento());
             procedimientoDto.setImagenes(imagenes);
+            procedimientoDto.setPasos(pasosProcedimientosService.obtenerPasosDeProcedimiento(procedimientoEntity.getIdProcedimiento()));
+            procedimientoDto.setRequisitos(requisitosProcedimientosService.obtenerRequisitosDeProcedimiento(procedimientoEntity.getIdProcedimiento()));
             procedimientosDtos.add(procedimientoDto);
         }
         return procedimientosDtos;
@@ -52,6 +54,8 @@ public class ProcedimientosService {
         ProcedimientoDto procedimientoDto = new ProcedimientoDto().convertirProcedimientoEntityAProcedimientoDto(procedimientoEntity);
         List<ImagenDto> imagenes = imagenesService.obtenerImagenes("procedimientos", procedimientoEntity.getIdProcedimiento());
         procedimientoDto.setImagenes(imagenes);
+        procedimientoDto.setPasos(pasosProcedimientosService.obtenerPasosDeProcedimiento(procedimientoEntity.getIdProcedimiento()));
+        procedimientoDto.setRequisitos(requisitosProcedimientosService.obtenerRequisitosDeProcedimiento(procedimientoEntity.getIdProcedimiento()));
         return procedimientoDto;
     }
 
