@@ -18,7 +18,6 @@ import com.example.microservicio_informacion_centro_medico.model.ProcedimientoEn
 public class ProcedimientoDto {
     private Integer idProcedimiento;
     private String nombreProcedimiento;
-    private String descripcionProcedimiento;
     private Date createdAt;
     private Date updatedAt;
     private Date deletedAt;
@@ -30,7 +29,6 @@ public class ProcedimientoDto {
         ProcedimientoDto procedimientoDto = new ProcedimientoDto();
         procedimientoDto.setIdProcedimiento(procedimientoEntity.getIdProcedimiento());
         procedimientoDto.setNombreProcedimiento(procedimientoEntity.getNombreProcedimiento());
-        procedimientoDto.setDescripcionProcedimiento(procedimientoEntity.getDescripcionProcedimiento());
         procedimientoDto.setCreatedAt(procedimientoEntity.getCreatedAt());
         procedimientoDto.setUpdatedAt(procedimientoEntity.getUpdatedAt());
         procedimientoDto.setDeletedAt(procedimientoEntity.getDeletedAt());

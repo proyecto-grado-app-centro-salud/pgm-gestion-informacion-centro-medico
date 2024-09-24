@@ -35,9 +35,6 @@ public class ProcedimientoEntity {
 
     @Column(name = "nombre_procedimiento")
     private String nombreProcedimiento;
-
-    @Column(name = "descripcion_procedimiento")
-    private String descripcionProcedimiento;
     
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)

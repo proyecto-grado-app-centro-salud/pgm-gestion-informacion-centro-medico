@@ -21,21 +21,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.microservicio_informacion_centro_medico.model.dtos.PasoDto;
 import com.example.microservicio_informacion_centro_medico.model.dtos.ProcedimientoDto;
-import com.example.microservicio_informacion_centro_medico.services.PasosProcedimientosService;
+import com.example.microservicio_informacion_centro_medico.model.dtos.RequisitoDto;
+import com.example.microservicio_informacion_centro_medico.services.PasosProcedimientosElementosService;
 import com.example.microservicio_informacion_centro_medico.services.ProcedimientosService;
+import com.example.microservicio_informacion_centro_medico.services.RequisitosProcedimientosElementosService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/v1.0/procedimientos")
-public class PasosProcedimientosController {
+public class RequisitosProcedimientosElementosController {
     @Autowired
-    private PasosProcedimientosService pasosProcedimientosService;
-    private static final Logger logger = LoggerFactory.getLogger(PasosProcedimientosController.class);
-    @GetMapping(value = "/{idProcedimiento}/pasos")
-    public ResponseEntity<List<PasoDto>> getPasosProcedimiento(@PathVariable int idProcedimiento) {
+    private RequisitosProcedimientosElementosService requisitosProcedimientosElementosService;
+    private static final Logger logger = LoggerFactory.getLogger(PasosProcedimientosElementosController.class);
+    @GetMapping(value = "/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/requisitos")
+    public ResponseEntity<List<RequisitoDto>> getPasosProcedimiento(@PathVariable int idProcedimiento,@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
-            return new ResponseEntity<>(pasosProcedimientosService.obtenerPasosDeProcedimiento(idProcedimiento), HttpStatus.OK);
+            return new ResponseEntity<>(requisitosProcedimientosElementosService.obtenerRequisitosDeProcedimientoElemento(idProcedimiento,idElemento,tipoElemento), HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
             new RuntimeException(e);
@@ -44,20 +46,20 @@ public class PasosProcedimientosController {
     }
 
 
-    @PostMapping(value = "/{idProcedimiento}/pasos/{idPaso}")
-    public ResponseEntity<Void> createPasoProcedimiento(@PathVariable int idProcedimiento,@PathVariable int idPaso) {
+    @PostMapping(value = "/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/requisitos/{idRequisito}")
+    public ResponseEntity<Void> createRequisitoProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idRequisito,@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
-            pasosProcedimientosService.crearPasoProcedimiento(idProcedimiento, idPaso);
+            requisitosProcedimientosElementosService.crearRequisitoProcedimientoElemento(idProcedimiento, idRequisito, idElemento, tipoElemento);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @DeleteMapping("/{idProcedimiento}/pasos/{idPaso}")
-    public ResponseEntity<Void> deletePasoProcedimiento(@PathVariable int idProcedimiento,@PathVariable int idPaso) {
+    @DeleteMapping("/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/requisitos/{idRequisito}")
+    public ResponseEntity<Void> deleteRequisitoProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idRequisito,@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
-            pasosProcedimientosService.eliminarPasoProcedimiento(idProcedimiento,idPaso);
+            requisitosProcedimientosElementosService.eliminarRequisitoProcedimientoElemento(idProcedimiento,idRequisito,idElemento,tipoElemento);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

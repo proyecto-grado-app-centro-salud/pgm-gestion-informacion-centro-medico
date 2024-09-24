@@ -1,7 +1,5 @@
 package com.example.microservicio_informacion_centro_medico.model.util.ids_embebidos;
-
 import java.io.Serializable;
-import java.util.Objects;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -14,7 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-public class ProcedimientoPasoId implements Serializable{
+public class ProcedimientoElementoRequisitoId implements Serializable{
     private Integer id_procedimiento;
-    private Integer id_paso;
+    private Integer id_elemento;
+    private String tipo_elemento;
+    private Integer id_requisito;
 }

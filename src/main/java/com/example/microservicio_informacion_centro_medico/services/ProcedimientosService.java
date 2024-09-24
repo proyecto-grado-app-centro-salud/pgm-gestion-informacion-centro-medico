@@ -15,9 +15,9 @@ import com.example.microservicio_informacion_centro_medico.model.dtos.ImagenDto;
 import com.example.microservicio_informacion_centro_medico.model.dtos.PasoDto;
 import com.example.microservicio_informacion_centro_medico.model.dtos.ProcedimientoDto;
 import com.example.microservicio_informacion_centro_medico.model.dtos.RequisitoDto;
-import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosPasosRepositoryJPA;
+import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosElementosPasosRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosRepositoryJPA;
-import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosRequisitosRepositoryJPA;
+import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosElementosRequisitosRepositoryJPA;
 
 @Service
 public class ProcedimientosService {
@@ -26,10 +26,10 @@ public class ProcedimientosService {
     private ProcedimientosRepositoryJPA procedimientosRepositoryJPA;
 
     @Autowired
-    private PasosProcedimientosService pasosProcedimientosService;
+    private PasosProcedimientosElementosService pasosProcedimientosService;
 
     @Autowired
-    private RequisitosProcedimientosService requisitosProcedimientosService;
+    private RequisitosProcedimientosElementosService requisitosProcedimientosService;
 
     @Autowired
     ImagenesService imagenesService;
@@ -41,8 +41,6 @@ public class ProcedimientosService {
             ProcedimientoDto procedimientoDto = new ProcedimientoDto().convertirProcedimientoEntityAProcedimientoDto(procedimientoEntity);
             List<ImagenDto> imagenes = imagenesService.obtenerImagenes("procedimientos", procedimientoEntity.getIdProcedimiento());
             procedimientoDto.setImagenes(imagenes);
-            procedimientoDto.setPasos(pasosProcedimientosService.obtenerPasosDeProcedimiento(procedimientoEntity.getIdProcedimiento()));
-            procedimientoDto.setRequisitos(requisitosProcedimientosService.obtenerRequisitosDeProcedimiento(procedimientoEntity.getIdProcedimiento()));
             procedimientosDtos.add(procedimientoDto);
         }
         return procedimientosDtos;
@@ -54,15 +52,12 @@ public class ProcedimientosService {
         ProcedimientoDto procedimientoDto = new ProcedimientoDto().convertirProcedimientoEntityAProcedimientoDto(procedimientoEntity);
         List<ImagenDto> imagenes = imagenesService.obtenerImagenes("procedimientos", procedimientoEntity.getIdProcedimiento());
         procedimientoDto.setImagenes(imagenes);
-        procedimientoDto.setPasos(pasosProcedimientosService.obtenerPasosDeProcedimiento(procedimientoEntity.getIdProcedimiento()));
-        procedimientoDto.setRequisitos(requisitosProcedimientosService.obtenerRequisitosDeProcedimiento(procedimientoEntity.getIdProcedimiento()));
         return procedimientoDto;
     }
 
     public ProcedimientoDto crearProcedimiento(ProcedimientoDto procedimientoDto, Map<String, MultipartFile> allFiles) {
         ProcedimientoEntity procedimientoEntity = new ProcedimientoEntity();
         procedimientoEntity.setNombreProcedimiento(procedimientoDto.getNombreProcedimiento());
-        procedimientoEntity.setDescripcionProcedimiento(procedimientoDto.getDescripcionProcedimiento());
 
         ProcedimientoEntity savedEntity = procedimientosRepositoryJPA.save(procedimientoEntity);
 
@@ -77,7 +72,6 @@ public class ProcedimientosService {
             .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
 
         procedimientoEntity.setNombreProcedimiento(procedimientoDto.getNombreProcedimiento());
-        procedimientoEntity.setDescripcionProcedimiento(procedimientoDto.getDescripcionProcedimiento());
 
         ProcedimientoEntity updatedEntity = procedimientosRepositoryJPA.save(procedimientoEntity);
         imagenesService.actualizarImagenes(allFiles, params, "procedimientos", procedimientoEntity.getIdProcedimiento());
