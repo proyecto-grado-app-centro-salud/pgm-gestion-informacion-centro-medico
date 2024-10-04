@@ -28,6 +28,12 @@ public class PasosProcedimientosElementosService {
     @Autowired
     private ProcedimientosElementosRepositoryJPA procedimientosElementosRepositoryJPA;
 
+    @Autowired
+    private ProcedimientosElementosService procedimientosElementosService;
+
+    @Autowired
+    private ProcedimientosRepositoryJPA procedimientosRepositoryJPA;
+
 
     @Autowired
     private PasosRepositoryJPA pasosRepositoryJPA;
@@ -37,9 +43,13 @@ public class PasosProcedimientosElementosService {
 
     public List<PasoDto> obtenerPasosDeProcedimiento(int idProcedimiento, int idElemento, String tipoElemento) {
 
+        procedimientosElementosService.verificarExisteciaElemento(idElemento,tipoElemento);
 
-        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findById(new ProcedimientoElementoId(idProcedimiento,idElemento,tipoElemento))
-            .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
+        ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)
+        .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
+
+        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findOneByIdElementoAndTipoElementoAndProcedimiento(idElemento,tipoElemento,procedimientoEntity)
+            .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
 
         List<PasoDto> pasosDtos = procedimientosElementosPasosRepositoryJPA.findByProcedimientoElemento(procedimientoElementoEntity)
                                           .stream()
@@ -54,24 +64,41 @@ public class PasosProcedimientosElementosService {
 
 
     public void eliminarPasoProcedimientoElemento(int idProcedimiento, int idPaso, int idElemento, String tipoElemento) {
-        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findById(new ProcedimientoElementoId(idProcedimiento,idElemento,tipoElemento))
-        .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
+        procedimientosElementosService.verificarExisteciaElemento(idElemento,tipoElemento);
 
+        ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)
+        .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
+
+        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findOneByIdElementoAndTipoElementoAndProcedimiento(idElemento,tipoElemento,procedimientoEntity)
+            .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
 
         PasoEntity pasoEntity = pasosRepositoryJPA.findById(idPaso)
         .orElseThrow(() -> new RuntimeException("Paso no encontrado"));
-        procedimientosElementosPasosRepositoryJPA.deleteById(new ProcedimientoElementoPasoId(idProcedimiento,idElemento,tipoElemento,idPaso));
+
+        ProcedimientoElementoPasoEntity procedimientoElementoPasoEntity = procedimientosElementosPasosRepositoryJPA.findOneByProcedimientoElementoAndPaso(procedimientoElementoEntity, pasoEntity)
+        .orElseThrow(() -> new RuntimeException("Procedimiento elemento paso no encontrado"));
+
+        procedimientosElementosPasosRepositoryJPA.delete(procedimientoElementoPasoEntity);
     }
 
 
     public void crearPasoProcedimientoElemento(int idProcedimiento, int idPaso, int idElemento, String tipoElemento) {
-        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findById(new ProcedimientoElementoId(idProcedimiento,idElemento,tipoElemento))
-        .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
+        procedimientosElementosService.verificarExisteciaElemento(idElemento,tipoElemento);
+
+        ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)
+        .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
+
+        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findOneByIdElementoAndTipoElementoAndProcedimiento(idElemento,tipoElemento,procedimientoEntity)
+            .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
 
         PasoEntity pasoEntity = pasosRepositoryJPA.findById(idPaso)
         .orElseThrow(() -> new RuntimeException("Paso no encontrado"));
-        ProcedimientoElementoPasoId procedimientoElementoPasoId=new ProcedimientoElementoPasoId(idProcedimiento,idElemento,tipoElemento,idPaso);
-        procedimientosElementosPasosRepositoryJPA.save(new ProcedimientoElementoPasoEntity(procedimientoElementoPasoId,procedimientoElementoEntity,pasoEntity));
+
+        ProcedimientoElementoPasoEntity procedimientoElementoPasoEntity = new ProcedimientoElementoPasoEntity();
+        procedimientoElementoPasoEntity.setPaso(pasoEntity);
+        procedimientoElementoPasoEntity.setProcedimientoElemento(procedimientoElementoEntity);
+
+        procedimientosElementosPasosRepositoryJPA.save(procedimientoElementoPasoEntity);
     }
     
 }

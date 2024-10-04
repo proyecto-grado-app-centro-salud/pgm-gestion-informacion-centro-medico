@@ -18,6 +18,7 @@ import com.example.microservicio_informacion_centro_medico.model.ProcedimientoEn
 public class ProcedimientoDto {
     private Integer idProcedimiento;
     private String nombreProcedimiento;
+    private String descripcion;
     private Date createdAt;
     private Date updatedAt;
     private Date deletedAt;

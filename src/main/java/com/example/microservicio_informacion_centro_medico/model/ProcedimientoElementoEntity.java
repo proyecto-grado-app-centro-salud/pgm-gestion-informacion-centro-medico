@@ -8,6 +8,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -24,10 +27,19 @@ import lombok.Setter;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "procedimientos_elementos")
 public class ProcedimientoElementoEntity {
-    @EmbeddedId
-    private ProcedimientoElementoId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_procedimiento_elemento")
+    private int idProcedimientoElemento;
+
+    @Column(name = "id_elemento")
+    private int idElemento;
+
+    @Column(name = "tipo_elemento")
+    private String tipoElemento;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_procedimiento", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "id_procedimiento", nullable = false)
     private ProcedimientoEntity procedimiento;
 
     @Column(name = "descripcion")

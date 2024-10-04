@@ -14,12 +14,17 @@ import com.example.microservicio_informacion_centro_medico.model.dtos.Procedimie
 import com.example.microservicio_informacion_centro_medico.model.dtos.ProcedimientoElementoDto;
 import com.example.microservicio_informacion_centro_medico.model.util.ids_embebidos.ProcedimientoElementoId;
 import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosElementosRepositoryJPA;
+import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosRepositoryJPA;
 
 @Service
 public class ProcedimientosElementosService {
 
     @Autowired
     ProcedimientosElementosRepositoryJPA procedimientosElementosRepositoryJPA;
+
+    @Autowired
+    ProcedimientosRepositoryJPA procedimientosRepositoryJPA;
+
 
     @Autowired
     EspecialidadesService especialidadesService;
@@ -29,19 +34,30 @@ public class ProcedimientosElementosService {
 
     public void crearProcedimientoElemento(int idProcedimiento, int idElemento, String tipoElemento,@RequestParam("data") ProcedimientoElementoDto procedimientoElementoDto) {
 
-        ProcedimientoElementoEntity procedimientoElementoEntity = new ProcedimientoElementoEntity();
-        ProcedimientoElementoId id = new ProcedimientoElementoId(idProcedimiento, idElemento,tipoElemento);
-        
-        procedimientoElementoEntity.setId(id);
+        ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)
+        .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
+
+        verificarExisteciaElemento(idElemento,tipoElemento);
+
+
+        ProcedimientoElementoEntity procedimientoElementoEntity = new ProcedimientoElementoEntity();        
+        procedimientoElementoEntity.setIdElemento(idElemento);
+        procedimientoElementoEntity.setTipoElemento(tipoElemento);
+        procedimientoElementoEntity.setProcedimiento(procedimientoEntity);
         procedimientoElementoEntity.setDescripcion(procedimientoElementoDto.getDescripcion());
         
 
-        procedimientosElementosRepositoryJPA.save(procedimientoElementoEntity);    }
+        procedimientosElementosRepositoryJPA.save(procedimientoElementoEntity);    
+    }
 
     public void eliminarProcedimientoElemento(int idProcedimiento, int idElemento, String tipoElemento) {
+        verificarExisteciaElemento(idElemento,tipoElemento);
 
-        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findById(new ProcedimientoElementoId(idProcedimiento,idElemento,tipoElemento))
-        .orElseThrow(() -> new RuntimeException("Elemento no encontrado"));
+        ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)
+        .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
+
+        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findOneByIdElementoAndTipoElementoAndProcedimiento(idElemento,tipoElemento,procedimientoEntity)
+        .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
         procedimientosElementosRepositoryJPA.delete(procedimientoElementoEntity);
     }
 
@@ -59,7 +75,7 @@ public class ProcedimientosElementosService {
         return pasosDtos;
     }
 
-    private void verificarExisteciaElemento(int idElemento, String tipoElemento) {
+    protected void verificarExisteciaElemento(int idElemento, String tipoElemento) {
         switch (tipoElemento) {
             case "especialidades":
                 especialidadesService.obtenerEspecialidadPorId(idElemento);
@@ -72,7 +88,10 @@ public class ProcedimientosElementosService {
     public ProcedimientoDto obtenerProcedimientoDeElemento(int idProcedimiento, int idElemento, String tipoElemento) {
         verificarExisteciaElemento(idElemento,tipoElemento);
 
-        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findById(new ProcedimientoElementoId(idProcedimiento,idElemento,tipoElemento))
+        ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)
+        .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
+
+        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findOneByIdElementoAndTipoElementoAndProcedimiento(idElemento,tipoElemento,procedimientoEntity)
         .orElseThrow(() -> new RuntimeException("Elemento no encontrado"));
 
         return new ProcedimientoDto().convertirProcedimientoEntityAProcedimientoDto(procedimientoElementoEntity.getProcedimiento());

@@ -37,15 +37,27 @@ public class RequisitosProcedimientosElementosService {
     private RequisitosRepositoryJPA requisitosRepositoryJPA;
 
     @Autowired
+    private ProcedimientosElementosService procedimientosElementosService;
+
+
+    @Autowired
     ImagenesService imagenesService;
+
+    @Autowired
+    private ProcedimientosRepositoryJPA procedimientosRepositoryJPA;
 
     public List<RequisitoDto> obtenerRequisitosDeProcedimientoElemento(int idProcedimiento, int idElemento, String tipoElemento) {
 
 
-        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findById(new ProcedimientoElementoId(idProcedimiento,idElemento,tipoElemento))
-            .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
+        procedimientosElementosService.verificarExisteciaElemento(idElemento,tipoElemento);
 
-        List<RequisitoDto> pasosDtos = procedimientosElementosRequisitosRepositoryJPA.findByProcedimientoElemento(procedimientoElementoEntity)
+        ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)
+        .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
+
+        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findOneByIdElementoAndTipoElementoAndProcedimiento(idElemento,tipoElemento,procedimientoEntity)
+            .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
+
+        List<RequisitoDto> requisitosDtos = procedimientosElementosRequisitosRepositoryJPA.findByProcedimientoElemento(procedimientoElementoEntity)
                                           .stream()
                                           .map(procedimientoElementoRequisitoEntity->{
                                             RequisitoDto requisitoDto = new RequisitoDto().convertirRequisitoEntityARequisitoDto(procedimientoElementoRequisitoEntity.getRequisito()); 
@@ -53,28 +65,46 @@ public class RequisitosProcedimientosElementosService {
                                             return requisitoDto;
                                            })
                                           .collect(Collectors.toList());
-        return pasosDtos;
+        return requisitosDtos;
     }
 
 
     public void eliminarRequisitoProcedimientoElemento(int idProcedimiento, int idRequisito, int idElemento, String tipoElemento) {
-        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findById(new ProcedimientoElementoId(idProcedimiento,idElemento,tipoElemento))
-        .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
+        procedimientosElementosService.verificarExisteciaElemento(idElemento,tipoElemento);
 
+        ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)
+        .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
+
+        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findOneByIdElementoAndTipoElementoAndProcedimiento(idElemento,tipoElemento,procedimientoEntity)
+            .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
 
         RequisitoEntity requisitoEntity = requisitosRepositoryJPA.findById(idRequisito)
         .orElseThrow(() -> new RuntimeException("Requisito no encontrado"));
-        procedimientosElementosRequisitosRepositoryJPA.deleteById(new ProcedimientoElementoRequisitoId(idProcedimiento,idElemento,tipoElemento,idRequisito));
+
+        ProcedimientoElementoRequisitoEntity procedimientoElementoRequisitoEntity = procedimientosElementosRequisitosRepositoryJPA.findOneByProcedimientoElementoAndRequisito(procedimientoElementoEntity, requisitoEntity)
+        .orElseThrow(() -> new RuntimeException("Procedimiento elemento paso no encontrado"));
+
+
+        procedimientosElementosRequisitosRepositoryJPA.delete(procedimientoElementoRequisitoEntity);
     }
 
 
     public void crearRequisitoProcedimientoElemento(int idProcedimiento, int idRequisito, int idElemento, String tipoElemento) {
-        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findById(new ProcedimientoElementoId(idProcedimiento,idElemento,tipoElemento))
-        .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
+        procedimientosElementosService.verificarExisteciaElemento(idElemento,tipoElemento);
+
+        ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)
+        .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
+
+        ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findOneByIdElementoAndTipoElementoAndProcedimiento(idElemento,tipoElemento,procedimientoEntity)
+            .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
 
         RequisitoEntity requisitoEntity = requisitosRepositoryJPA.findById(idRequisito)
         .orElseThrow(() -> new RuntimeException("Requisito no encontrado"));
-        ProcedimientoElementoRequisitoId procedimientoElementoRequisitoId=new ProcedimientoElementoRequisitoId(idProcedimiento,idElemento,tipoElemento,idRequisito);
-        procedimientosElementosRequisitosRepositoryJPA.save(new ProcedimientoElementoRequisitoEntity(procedimientoElementoRequisitoId,procedimientoElementoEntity,requisitoEntity));
+
+        ProcedimientoElementoRequisitoEntity procedimientoElementoRequisitoEntity = new ProcedimientoElementoRequisitoEntity();
+        procedimientoElementoRequisitoEntity.setProcedimientoElemento(procedimientoElementoEntity);
+        procedimientoElementoRequisitoEntity.setRequisito(requisitoEntity);
+
+        procedimientosElementosRequisitosRepositoryJPA.save(procedimientoElementoRequisitoEntity);
     }
 }
