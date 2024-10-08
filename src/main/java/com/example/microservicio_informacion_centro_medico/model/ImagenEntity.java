@@ -17,27 +17,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@Table(name = "especialidades")
-public class EspecialidadesEntity{
-    @Id
+@Table(name = "imagenes")
+public class ImagenEntity {
+     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_especialidad")
-    private int idEspecialidad;
+    @Column(name = "id_imagen")
+    private int idImagen;
+
+    @Column(name = "imageable_id")
+    private Integer imageableId;
+
+    @Column(name = "imageable_type")
+    private String imageableType;
+
     @Column(name = "nombre")
     private String nombre;
-    @Column(name = "descripcion")
-    private String descripcion;
-    @Column(name = "fecha_creacion")
-    private Date fechaCreacion;
 
+    @Column(name = "tipo")
+    private String tipo;
+
+    @Column(name = "url")
+    private String url;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
@@ -63,5 +68,4 @@ public class EspecialidadesEntity{
     public void markAsDeleted() {
         deletedAt = new Date();
     }
-
 }

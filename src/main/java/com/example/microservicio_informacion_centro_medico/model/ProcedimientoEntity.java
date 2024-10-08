@@ -1,6 +1,6 @@
 package com.example.microservicio_informacion_centro_medico.model;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -25,19 +25,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @AllArgsConstructor
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@Table(name = "especialidades")
-public class EspecialidadesEntity{
+@Table(name = "procedimientos_atencion")
+public class ProcedimientoEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_especialidad")
-    private int idEspecialidad;
-    @Column(name = "nombre")
-    private String nombre;
-    @Column(name = "descripcion")
-    private String descripcion;
-    @Column(name = "fecha_creacion")
-    private Date fechaCreacion;
+    @Column(name = "id_procedimiento")
+    private int idProcedimiento;
 
+    @Column(name = "nombre_procedimiento")
+    private String nombreProcedimiento;
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
@@ -50,18 +48,18 @@ public class EspecialidadesEntity{
     @Column(name = "deleted_at")
     private Date deletedAt;
 
-    
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();
         updatedAt = new Date();
     }
+
     @PreUpdate
     protected void onUpdate() {
         updatedAt = new Date();
     }
+
     public void markAsDeleted() {
         deletedAt = new Date();
     }
-
 }

@@ -1,0 +1,13 @@
+package com.example.microservicio_informacion_centro_medico.repository;
+
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.microservicio_informacion_centro_medico.model.ProcedimientoEntity;
+import com.example.microservicio_informacion_centro_medico.model.ProcedimientoElementoEntity;
+import com.example.microservicio_informacion_centro_medico.model.ProcedimientoElementoRequisitoEntity;
+import com.example.microservicio_informacion_centro_medico.model.util.ids_embebidos.ProcedimientoElementoRequisitoId;
+
+public interface ProcedimientosElementosRequisitosRepositoryJPA extends JpaRepository<ProcedimientoElementoRequisitoEntity, ProcedimientoElementoRequisitoId> {
+    List<ProcedimientoElementoRequisitoEntity> findByProcedimientoElemento(ProcedimientoElementoEntity procedimientoElemento);
+}
