@@ -2,6 +2,8 @@ package com.example.microservicio_informacion_centro_medico.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,6 @@ import com.example.microservicio_informacion_centro_medico.services.Procedimient
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/v1.0/procedimientos")
 public class ProcedimientosController {
 
@@ -29,6 +30,8 @@ public class ProcedimientosController {
     private ProcedimientosService procedimientosService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private final Logger logger = LoggerFactory.getLogger(ProcedimientosController.class);
 
     @GetMapping
     public ResponseEntity<List<ProcedimientoDto>> getProcedimientos() {
@@ -57,6 +60,7 @@ public class ProcedimientosController {
             ProcedimientoDto createdProcedimiento = procedimientosService.crearProcedimiento(procedimientoDto, allFiles);
             return new ResponseEntity<>(createdProcedimiento, HttpStatus.OK);
         } catch (Exception e) {
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -69,6 +73,7 @@ public class ProcedimientosController {
             ProcedimientoDto updatedProcedimiento = procedimientosService.actualizarProcedimiento(id, procedimientoDto, allFiles, params);
             return new ResponseEntity<>(updatedProcedimiento, HttpStatus.OK);
         } catch (Exception e) {
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -79,6 +84,7 @@ public class ProcedimientosController {
             procedimientosService.eliminarProcedimiento(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

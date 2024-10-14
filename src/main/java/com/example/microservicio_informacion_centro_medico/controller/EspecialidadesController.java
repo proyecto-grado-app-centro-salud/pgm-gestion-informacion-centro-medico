@@ -30,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(path = "/especialidades")
 public class EspecialidadesController {
     

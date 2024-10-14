@@ -23,7 +23,6 @@ import com.example.microservicio_informacion_centro_medico.services.ComunicadosS
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping()
 public class ComunicadosController {
 

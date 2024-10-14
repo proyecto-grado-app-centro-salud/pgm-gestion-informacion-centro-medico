@@ -30,7 +30,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(path = "/consultorios")
 public class ConsultoriosController {
 

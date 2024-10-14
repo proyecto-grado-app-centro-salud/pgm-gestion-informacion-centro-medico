@@ -24,7 +24,6 @@ import com.example.microservicio_informacion_centro_medico.services.RequisitosSe
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/v1.0/requisitos")
 public class RequisitosController {
 

@@ -22,7 +22,6 @@ import com.example.microservicio_informacion_centro_medico.services.PasosService
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/v1.0/pasos")
 public class PasosController {
 
