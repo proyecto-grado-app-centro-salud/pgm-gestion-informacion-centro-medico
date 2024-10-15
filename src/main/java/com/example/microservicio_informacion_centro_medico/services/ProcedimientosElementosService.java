@@ -80,6 +80,8 @@ public class ProcedimientosElementosService {
             case "especialidades":
                 especialidadesService.obtenerEspecialidadPorId(idElemento);
                 break;
+            case "centro-salud":
+                break;
             default:
                 throw new RuntimeException("Elemento no encontrado");
         }
@@ -95,6 +97,21 @@ public class ProcedimientosElementosService {
         .orElseThrow(() -> new RuntimeException("Elemento no encontrado"));
 
         return new ProcedimientoDto().convertirProcedimientoEntityAProcedimientoDto(procedimientoElementoEntity.getProcedimiento());
+    }
+
+    public List<ProcedimientoElementoDto> obtenerElementosDeProcedimiento(int idProcedimiento) {
+        ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)
+        .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
+
+        List<ProcedimientoElementoDto> procedimientosElementosDtos = procedimientosElementosRepositoryJPA.findAllProcedimientoElementoByIdProcedimiento(idProcedimiento);
+
+        procedimientosElementosDtos = procedimientosElementosDtos
+                                          .stream()
+                                          .map(procedimientoElementoDto->{
+                                            procedimientoElementoDto.setImagenes(imagenesService.obtenerImagenes("procedimientos-elementos", procedimientoElementoDto.getIdProcedimientoElemento()));
+                                            return procedimientoElementoDto;
+                                           }).toList();
+        return procedimientosElementosDtos;
     }
     
 }

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.microservicio_informacion_centro_medico.model.EspecialidadesEntity;
+import com.example.microservicio_informacion_centro_medico.model.EspecialidadEntity;
 import com.example.microservicio_informacion_centro_medico.model.dtos.EspecialidadDto;
 import com.example.microservicio_informacion_centro_medico.repository.EspecialidadesRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.services.EspecialidadesService;

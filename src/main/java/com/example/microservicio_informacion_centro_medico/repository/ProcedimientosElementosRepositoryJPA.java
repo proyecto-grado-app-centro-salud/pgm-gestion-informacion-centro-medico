@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.microservicio_informacion_centro_medico.model.ProcedimientoElementoEntity;
 import com.example.microservicio_informacion_centro_medico.model.ProcedimientoEntity;
-import com.example.microservicio_informacion_centro_medico.model.util.ids_embebidos.ProcedimientoElementoId;
+import com.example.microservicio_informacion_centro_medico.model.dtos.ProcedimientoElementoDto;
 
 public interface ProcedimientosElementosRepositoryJPA extends JpaRepository<ProcedimientoElementoEntity, Integer> {
 
@@ -24,4 +24,33 @@ public interface ProcedimientosElementosRepositoryJPA extends JpaRepository<Proc
 
     Optional<ProcedimientoElementoEntity> findOneByIdElementoAndTipoElementoAndProcedimiento(int idElemento, String tipoElemento, ProcedimientoEntity procedimiento);
 
+
+    List<ProcedimientoElementoEntity> findAllByProcedimiento(ProcedimientoEntity procedimientoEntity);
+
+
+    // @Query("SELECT new com.example.microservicio_informacion_centro_medico.model.dtos.ProcedimientoElementoDto(pe.idProcedimientoElemento, pe.procedimiento.nombreProcedimiento, pe.procedimiento.idProcedimiento, pe.tipoElemento, pe.idElemento, " +
+    //    "CASE pe.tipoElemento " +
+    //    "WHEN 'especialidades' THEN e.nombre " +
+    //    "WHEN 'consultorios' THEN c.nombre " +
+    //    "ELSE NULL " +
+    //    "END, pe.descripcion) " +
+    //    "FROM ProcedimientoElementoEntity pe " +
+    //    "LEFT JOIN EspecialidadEntity e ON e.idEspecialidad = pe.idElemento AND pe.tipoElemento = 'especialidades' " +
+    //    "LEFT JOIN ConsultorioEntity c ON c.idConsultorio = pe.idElemento AND pe.tipoElemento = 'consultorios' " +
+    //    "WHERE pe.idProcedimiento = :idProcedimiento " +
+    //    "AND ((pe.tipoElemento = 'especialidades' AND e.idEspecialidad IS NOT NULL) OR " +
+    //    "(pe.tipoElemento = 'consultorios' AND c.idConsultorio IS NOT NULL))")
+    // List<ProcedimientoElementoDto> findAllProcedimientoElementoByIdProcedimiento(@Param("idProcedimiento") int idProcedimiento);
+
+    @Query("SELECT new com.example.microservicio_informacion_centro_medico.model.dtos.ProcedimientoElementoDto("+
+    "pe.idProcedimientoElemento, pe.procedimiento.nombreProcedimiento, pe.procedimiento.idProcedimiento, pe.tipoElemento, pe.idElemento, "+
+    "CASE pe.tipoElemento WHEN 'especialidades' THEN e.nombre WHEN 'consultorios' THEN c.nombre ELSE null END, pe.descripcion) " +
+    "FROM ProcedimientoElementoEntity pe " +
+    "LEFT JOIN EspecialidadEntity e ON e.idEspecialidad = pe.idElemento AND pe.tipoElemento = 'especialidades' " +
+    "LEFT JOIN ConsultorioEntity c ON c.idConsultorio = pe.idElemento AND pe.tipoElemento = 'consultorios' "+
+    "WHERE pe.procedimiento.idProcedimiento = :idProcedimiento "+
+    "AND ((pe.tipoElemento = 'especialidades' AND e.idEspecialidad IS NOT NULL) OR " +
+    "(pe.tipoElemento = 'consultorios' AND c.idConsultorio IS NOT NULL))")
+
+    List<ProcedimientoElementoDto> findAllProcedimientoElementoByIdProcedimiento(@Param("idProcedimiento") int idProcedimiento);
 }
