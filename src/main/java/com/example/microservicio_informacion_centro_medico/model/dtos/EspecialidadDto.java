@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.example.microservicio_informacion_centro_medico.model.ConsultorioEntity;
-import com.example.microservicio_informacion_centro_medico.model.EspecialidadesEntity;
+import com.example.microservicio_informacion_centro_medico.model.EspecialidadEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
@@ -30,7 +30,7 @@ public class EspecialidadDto {
     private Date updatedAt;
     private Date deletedAt;
     private List<ImagenDto> imagenes;
-    public EspecialidadDto convertirEspecialidadEntityAEspecialidadDto(EspecialidadesEntity especialidadEntity){
+    public EspecialidadDto convertirEspecialidadEntityAEspecialidadDto(EspecialidadEntity especialidadEntity){
         EspecialidadDto especialidadDto=new EspecialidadDto();
         especialidadDto.idEspecialidad=especialidadEntity.getIdEspecialidad();
         especialidadDto.nombre=especialidadEntity.getNombre();

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.microservicio_informacion_centro_medico.model.ConsultorioEntity;
-import com.example.microservicio_informacion_centro_medico.model.EspecialidadesEntity;
+import com.example.microservicio_informacion_centro_medico.model.EspecialidadEntity;
 import com.example.microservicio_informacion_centro_medico.model.dtos.ConsultorioDto;
 import com.example.microservicio_informacion_centro_medico.repository.ConsultoriosRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.repository.EspecialidadesRepositoryJPA;
@@ -43,7 +43,7 @@ public class ConsultoriosService {
     }
 
     public ConsultorioDto crearConsultorio(ConsultorioDto consultorioDto,Map<String,MultipartFile> allFiles) {
-        EspecialidadesEntity especialidadesEntity=especialidadesRepositoryJPA.findByIdEspecialidadAndDeletedAtIsNull(consultorioDto.getIdEspecialidad())
+        EspecialidadEntity especialidadesEntity=especialidadesRepositoryJPA.findByIdEspecialidadAndDeletedAtIsNull(consultorioDto.getIdEspecialidad())
             .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));
         ConsultorioEntity consultorioEntity = new ConsultorioEntity();
         consultorioEntity.setNombre(consultorioDto.getNombre());
@@ -64,7 +64,7 @@ public class ConsultoriosService {
     }
 
     public ConsultorioDto actualizarConsultorio(int id, ConsultorioDto consultorioDto,Map<String, MultipartFile> allFiles,Map<String, String> params) {
-        EspecialidadesEntity especialidadesEntity=especialidadesRepositoryJPA.findByIdEspecialidadAndDeletedAtIsNull(consultorioDto.getIdEspecialidad())
+        EspecialidadEntity especialidadesEntity=especialidadesRepositoryJPA.findByIdEspecialidadAndDeletedAtIsNull(consultorioDto.getIdEspecialidad())
             .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));
         ConsultorioEntity consultorioEntity = consultoriosRepositoryJPA.findByIdConsultorioAndDeletedAtIsNull(id)
             .orElseThrow(() -> new RuntimeException("Consultorio no encontrada"));

@@ -44,7 +44,7 @@ public class ConsultorioEntity{
     // private int idEspecialidad;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_especialidad", nullable = false)
-    private EspecialidadesEntity especialidad;
+    private EspecialidadEntity especialidad;
     
     @Column(name = "codigo_consultorio")
     private String codigoConsultorio;

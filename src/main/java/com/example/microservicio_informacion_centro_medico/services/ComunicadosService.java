@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.microservicio_informacion_centro_medico.model.ComunicadoEntity;
-import com.example.microservicio_informacion_centro_medico.model.EspecialidadesEntity;
+import com.example.microservicio_informacion_centro_medico.model.EspecialidadEntity;
 import com.example.microservicio_informacion_centro_medico.model.dtos.ComunicadoDto;
 import com.example.microservicio_informacion_centro_medico.model.dtos.ConsultorioDto;
 import com.example.microservicio_informacion_centro_medico.repository.ComunicadosRepositoryJPA;
