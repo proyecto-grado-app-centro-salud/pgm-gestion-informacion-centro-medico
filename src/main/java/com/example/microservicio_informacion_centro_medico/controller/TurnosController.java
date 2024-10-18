@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.microservicio_informacion_centro_medico.model.TurnosEntity;
+import com.example.microservicio_informacion_centro_medico.model.TurnoEntity;
 import com.example.microservicio_informacion_centro_medico.repository.TurnosRepositoryJPA;
 
 
@@ -21,7 +21,7 @@ public class TurnosController {
     @Autowired
     TurnosRepositoryJPA turnosRepositoryJPA;
     @GetMapping("")
-    public List<TurnosEntity> getTurnos() {
+    public List<TurnoEntity> getTurnos() {
         return turnosRepositoryJPA.findAll();
         //return Collections.emptyList();
     }
