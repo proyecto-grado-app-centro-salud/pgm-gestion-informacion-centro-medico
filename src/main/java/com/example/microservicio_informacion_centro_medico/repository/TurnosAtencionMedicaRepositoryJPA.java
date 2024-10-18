@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.example.microservicio_informacion_centro_medico.model.HorariosAtencionMedicaEntity;
+import com.example.microservicio_informacion_centro_medico.model.TurnosAtencionMedicaEntity;
 
-public interface HorariosAtencionMedicaRepositoryJPA extends JpaRepository<HorariosAtencionMedicaEntity, Integer> {
+public interface TurnosAtencionMedicaRepositoryJPA extends JpaRepository<TurnosAtencionMedicaEntity, Integer> {
     @Query(value="SELECT tam.id_turno_atencion_medica,c.nombre,t.nombre,m.nombre,e.nombre,tam.fecha FROM turnos_atencion_medica tam"+
     " INNER JOIN consultorios c ON tam.id_consultorio =c.id_consultorio"+
     " INNER JOIN turnos t ON tam.id_turno =t.id_turno"+

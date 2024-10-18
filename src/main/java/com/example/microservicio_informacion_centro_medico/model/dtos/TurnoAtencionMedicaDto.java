@@ -1,0 +1,47 @@
+package com.example.microservicio_informacion_centro_medico.model.dtos;
+
+import java.time.LocalTime;
+import java.util.Date;
+
+import com.example.microservicio_informacion_centro_medico.model.TurnosAtencionMedicaEntity;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class TurnoAtencionMedicaDto {
+    private Integer idTurnoAtencionMedica;
+    private Integer numeroFichasDisponible;
+    private Date fecha;
+    private Integer idConsultorio;
+    private String nombreConsultorio;
+    private Integer idTurno;
+    private String nombreTurno;
+    private LocalTime horaInicio;
+    private LocalTime horaFin;
+    private Integer idMedico;
+    private String nombreMedico;
+    private Integer idEspecialidad;
+    private String nombreEspecialidad;
+    public TurnoAtencionMedicaDto convertirTurnoAtencionMedicaEntityTurnoAtencionMedicaDto(TurnosAtencionMedicaEntity turnoAtencionMedicaEntity){
+        TurnoAtencionMedicaDto turnoAtencionMedicaDto=new TurnoAtencionMedicaDto();
+        turnoAtencionMedicaDto.setIdTurnoAtencionMedica(turnoAtencionMedicaEntity.getIdTurnoAtencionMedica());
+        turnoAtencionMedicaDto.setNumeroFichasDisponible(turnoAtencionMedicaEntity.getNumeroFichasDisponible());
+        turnoAtencionMedicaDto.setFecha(turnoAtencionMedicaEntity.getFecha());
+        turnoAtencionMedicaDto.setIdConsultorio(turnoAtencionMedicaEntity.getConsultorio().getIdConsultorio());
+        turnoAtencionMedicaDto.setNombreConsultorio(turnoAtencionMedicaEntity.getConsultorio().getNombre());
+        turnoAtencionMedicaDto.setIdTurno(turnoAtencionMedicaEntity.getTurno().getIdTurno());
+        turnoAtencionMedicaDto.setNombreTurno(turnoAtencionMedicaEntity.getTurno().getNombre());
+        turnoAtencionMedicaDto.setHoraInicio(turnoAtencionMedicaEntity.getTurno().getHoraInicio());
+        turnoAtencionMedicaDto.setHoraFin(turnoAtencionMedicaEntity.getTurno().getHoraFin());
+        turnoAtencionMedicaDto.setIdMedico(turnoAtencionMedicaEntity.getMedico().getIdUsuario());
+        turnoAtencionMedicaDto.setNombreMedico(turnoAtencionMedicaEntity.getMedico().getNombres()+" "+turnoAtencionMedicaEntity.getMedico().getApellidoPaterno()+" "+turnoAtencionMedicaEntity.getMedico().getApellidoMaterno());
+        turnoAtencionMedicaDto.setIdEspecialidad(turnoAtencionMedicaEntity.getConsultorio().getEspecialidad().getIdEspecialidad());
+        turnoAtencionMedicaDto.setNombreEspecialidad(turnoAtencionMedicaEntity.getConsultorio().getEspecialidad().getNombre());
+        return turnoAtencionMedicaDto;
+    }
+}
