@@ -1,4 +1,7 @@
 package com.example.microservicio_informacion_centro_medico.model;
+
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,8 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.LocalTime;
-import java.util.Date;
 
 @Getter
 @Setter

@@ -1,8 +1,12 @@
 package com.example.microservicio_informacion_centro_medico.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,7 +31,6 @@ import com.example.microservicio_informacion_centro_medico.util.ApiResponse;
 
 @RestController
 @RequestMapping(path = "/horarios-atencion-medica")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class TurnosAtencionMedicaController {
     @Autowired
     TurnosAtencionMedicaService turnosAtencionMedicaService;
@@ -63,6 +67,19 @@ public class TurnosAtencionMedicaController {
             List<TurnoAtencionMedicaDto> detalles = turnosAtencionMedicaService.obtenerHorariosAtencionDetalle();
             return new ResponseEntity<>(detalles, HttpStatus.OK);
         } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    Logger logger = LoggerFactory.getLogger(TurnosAtencionMedicaService.class);
+
+    @GetMapping("/especialidades/{idEspecialidad}")
+    public ResponseEntity<List<TurnoAtencionMedicaDto>> obtenerTurnosAtencionMedicaDeEspecialidad(@PathVariable int idEspecialidad,@RequestParam(required = false) String fechaInicio,@RequestParam(required = false) String fechaFin,@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer size){
+        try {
+
+            List<TurnoAtencionMedicaDto> detalles = turnosAtencionMedicaService.obtenerTurnosAtencionMedicaPorEspecialidad(idEspecialidad,fechaInicio,fechaFin,page,size);
+            return new ResponseEntity<>(detalles, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
