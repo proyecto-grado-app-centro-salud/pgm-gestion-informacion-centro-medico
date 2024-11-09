@@ -15,7 +15,6 @@ import com.example.microservicio_informacion_centro_medico.repository.TurnosRepo
 
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(path = "/turnos")
 public class TurnosController {
     @Autowired

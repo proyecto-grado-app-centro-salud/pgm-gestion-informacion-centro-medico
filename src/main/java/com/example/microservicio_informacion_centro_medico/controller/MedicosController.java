@@ -14,7 +14,6 @@ import com.example.microservicio_informacion_centro_medico.model.MedicoEntity;
 import com.example.microservicio_informacion_centro_medico.repository.MedicoRepository;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(path="/medicos")
 public class MedicosController {
     @Autowired
