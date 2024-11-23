@@ -68,7 +68,7 @@ public class ProcedimientosElementosService {
                                           .stream()
                                           .map(procedimientoElementoEntity->{
                                             ProcedimientoDto procedimientoDto = new ProcedimientoDto().convertirProcedimientoEntityAProcedimientoDto(procedimientoElementoEntity.getProcedimiento()); 
-                                            procedimientoDto.setImagenes(imagenesService.obtenerImagenes("procedimientos", procedimientoDto.getIdProcedimiento()));
+                                            procedimientoDto.setImagenes(imagenesService.obtenerImagenes("procedimientos", procedimientoDto.getIdProcedimiento()+""));
                                             return procedimientoDto;
                                            })
                                           .collect(Collectors.toList());
@@ -108,7 +108,7 @@ public class ProcedimientosElementosService {
         procedimientosElementosDtos = procedimientosElementosDtos
                                           .stream()
                                           .map(procedimientoElementoDto->{
-                                            procedimientoElementoDto.setImagenes(imagenesService.obtenerImagenes("procedimientos-elementos", procedimientoElementoDto.getIdProcedimientoElemento()));
+                                            procedimientoElementoDto.setImagenes(imagenesService.obtenerImagenes("procedimientos-elementos", procedimientoElementoDto.getIdProcedimientoElemento()+""));
                                             return procedimientoElementoDto;
                                            }).toList();
         return procedimientosElementosDtos;

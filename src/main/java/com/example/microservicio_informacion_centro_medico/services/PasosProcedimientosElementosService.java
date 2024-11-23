@@ -55,7 +55,7 @@ public class PasosProcedimientosElementosService {
                                           .stream()
                                           .map(procedimientoElementoPasoEntity->{
                                             PasoDto pasoDto = new PasoDto().convertirPasoEntityAPasoDto(procedimientoElementoPasoEntity.getPaso()); 
-                                            pasoDto.setImagenes(imagenesService.obtenerImagenes("pasos", pasoDto.getIdPaso()));
+                                            pasoDto.setImagenes(imagenesService.obtenerImagenes("pasos", pasoDto.getIdPaso()+""));
                                             return pasoDto;
                                            })
                                           .collect(Collectors.toList());

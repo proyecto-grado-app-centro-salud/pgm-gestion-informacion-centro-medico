@@ -28,7 +28,7 @@ public class RequisitosService {
         List<RequisitoDto> requisitosDtos = new ArrayList<>();
         for (RequisitoEntity requisitoEntity : requisitosEntities) {
             RequisitoDto requisitoDto = new RequisitoDto().convertirRequisitoEntityARequisitoDto(requisitoEntity);
-            List<ImagenDto> imagenes = imagenesService.obtenerImagenes("requisitos", requisitoEntity.getIdRequisito());
+            List<ImagenDto> imagenes = imagenesService.obtenerImagenes("requisitos", requisitoEntity.getIdRequisito()+"");
             requisitoDto.setImagenes(imagenes);
             requisitosDtos.add(requisitoDto);
         }
@@ -39,7 +39,7 @@ public class RequisitosService {
         RequisitoEntity requisitoEntity = requisitosRepositoryJPA.findByIdRequisitoAndDeletedAtIsNull(id)
         .orElseThrow(() -> new RuntimeException("Requisito no encontrado"));
         RequisitoDto requisitoDto = new RequisitoDto().convertirRequisitoEntityARequisitoDto(requisitoEntity);
-        List<ImagenDto> imagenes = imagenesService.obtenerImagenes("requisitos", requisitoEntity.getIdRequisito());
+        List<ImagenDto> imagenes = imagenesService.obtenerImagenes("requisitos", requisitoEntity.getIdRequisito()+"");
         requisitoDto.setImagenes(imagenes);
         return requisitoDto;    
     }
@@ -52,7 +52,7 @@ public class RequisitosService {
         RequisitoEntity savedEntity = requisitosRepositoryJPA.save(requisitoEntity);
 
         List<MultipartFile> imagenes = imagenesService.obtenerImagenesDeArchivos(allFiles);
-        imagenesService.guardarImagenes(imagenes, "requisitos", savedEntity.getIdRequisito());
+        imagenesService.guardarImagenes(imagenes, "requisitos", savedEntity.getIdRequisito()+"");
 
         return new RequisitoDto().convertirRequisitoEntityARequisitoDto(savedEntity);
     }
@@ -66,7 +66,7 @@ public class RequisitosService {
         requisitoEntity.setDescripcion(requisitoDto.getDescripcion());
 
         RequisitoEntity updatedEntity = requisitosRepositoryJPA.save(requisitoEntity);
-        imagenesService.actualizarImagenes(allFiles, params, "requisitos", requisitoEntity.getIdRequisito());
+        imagenesService.actualizarImagenes(allFiles, params, "requisitos", requisitoEntity.getIdRequisito()+"");
 
         return new RequisitoDto().convertirRequisitoEntityARequisitoDto(updatedEntity);
     }

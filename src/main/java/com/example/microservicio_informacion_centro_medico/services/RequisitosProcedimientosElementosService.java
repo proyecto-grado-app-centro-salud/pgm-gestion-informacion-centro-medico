@@ -61,7 +61,7 @@ public class RequisitosProcedimientosElementosService {
                                           .stream()
                                           .map(procedimientoElementoRequisitoEntity->{
                                             RequisitoDto requisitoDto = new RequisitoDto().convertirRequisitoEntityARequisitoDto(procedimientoElementoRequisitoEntity.getRequisito()); 
-                                            requisitoDto.setImagenes(imagenesService.obtenerImagenes("requisitos", requisitoDto.getIdRequisito()));
+                                            requisitoDto.setImagenes(imagenesService.obtenerImagenes("requisitos", requisitoDto.getIdRequisito()+""));
                                             return requisitoDto;
                                            })
                                           .collect(Collectors.toList());

@@ -27,7 +27,7 @@ public class PasosService {
         List<PasoDto> pasosDtos = new ArrayList<>();
         for (PasoEntity pasoEntity : pasosEntities) {
             PasoDto pasoDto = new PasoDto().convertirPasoEntityAPasoDto(pasoEntity);
-            List<ImagenDto> imagenes = imagenesService.obtenerImagenes("pasos", pasoEntity.getIdPaso());
+            List<ImagenDto> imagenes = imagenesService.obtenerImagenes("pasos", pasoEntity.getIdPaso()+"");
             pasoDto.setImagenes(imagenes);
             pasosDtos.add(pasoDto);
         }
@@ -38,7 +38,7 @@ public class PasosService {
         PasoEntity pasoEntity = pasosRepositoryJPA.findByIdPasoAndDeletedAtIsNull(id)
             .orElseThrow(() -> new RuntimeException("Paso no encontrado"));
         PasoDto pasoDto = new PasoDto().convertirPasoEntityAPasoDto(pasoEntity);
-        List<ImagenDto> imagenes = imagenesService.obtenerImagenes("pasos", pasoEntity.getIdPaso());
+        List<ImagenDto> imagenes = imagenesService.obtenerImagenes("pasos", pasoEntity.getIdPaso()+"");
         pasoDto.setImagenes(imagenes);
         return pasoDto;
     }
@@ -51,7 +51,7 @@ public class PasosService {
         PasoEntity savedEntity = pasosRepositoryJPA.save(pasoEntity);
 
         List<MultipartFile> imagenes = imagenesService.obtenerImagenesDeArchivos(allFiles);
-        imagenesService.guardarImagenes(imagenes, "pasos", savedEntity.getIdPaso());
+        imagenesService.guardarImagenes(imagenes, "pasos", savedEntity.getIdPaso()+"");
 
         return new PasoDto().convertirPasoEntityAPasoDto(savedEntity);
     }
@@ -64,7 +64,7 @@ public class PasosService {
         pasoEntity.setDescripcion(pasoDto.getDescripcion());
 
         PasoEntity updatedEntity = pasosRepositoryJPA.save(pasoEntity);
-        imagenesService.actualizarImagenes(allFiles, params, "pasos", pasoEntity.getIdPaso());
+        imagenesService.actualizarImagenes(allFiles, params, "pasos", pasoEntity.getIdPaso()+"");
 
         return new PasoDto().convertirPasoEntityAPasoDto(updatedEntity);
     }

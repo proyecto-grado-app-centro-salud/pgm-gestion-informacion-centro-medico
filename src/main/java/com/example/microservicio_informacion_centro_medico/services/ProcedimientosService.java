@@ -39,7 +39,7 @@ public class ProcedimientosService {
         List<ProcedimientoDto> procedimientosDtos = new ArrayList<>();
         for (ProcedimientoEntity procedimientoEntity : procedimientosEntities) {
             ProcedimientoDto procedimientoDto = new ProcedimientoDto().convertirProcedimientoEntityAProcedimientoDto(procedimientoEntity);
-            List<ImagenDto> imagenes = imagenesService.obtenerImagenes("procedimientos", procedimientoEntity.getIdProcedimiento());
+            List<ImagenDto> imagenes = imagenesService.obtenerImagenes("procedimientos", procedimientoEntity.getIdProcedimiento()+"");
             procedimientoDto.setImagenes(imagenes);
             procedimientosDtos.add(procedimientoDto);
         }
@@ -50,7 +50,7 @@ public class ProcedimientosService {
         ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(id)
             .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
         ProcedimientoDto procedimientoDto = new ProcedimientoDto().convertirProcedimientoEntityAProcedimientoDto(procedimientoEntity);
-        List<ImagenDto> imagenes = imagenesService.obtenerImagenes("procedimientos", procedimientoEntity.getIdProcedimiento());
+        List<ImagenDto> imagenes = imagenesService.obtenerImagenes("procedimientos", procedimientoEntity.getIdProcedimiento()+"");
         procedimientoDto.setImagenes(imagenes);
         return procedimientoDto;
     }
@@ -62,7 +62,7 @@ public class ProcedimientosService {
         ProcedimientoEntity savedEntity = procedimientosRepositoryJPA.save(procedimientoEntity);
 
         List<MultipartFile> imagenes = imagenesService.obtenerImagenesDeArchivos(allFiles);
-        imagenesService.guardarImagenes(imagenes, "procedimientos", savedEntity.getIdProcedimiento());
+        imagenesService.guardarImagenes(imagenes, "procedimientos", savedEntity.getIdProcedimiento()+"");
 
         return new ProcedimientoDto().convertirProcedimientoEntityAProcedimientoDto(savedEntity);
     }
@@ -74,7 +74,7 @@ public class ProcedimientosService {
         procedimientoEntity.setNombreProcedimiento(procedimientoDto.getNombreProcedimiento());
 
         ProcedimientoEntity updatedEntity = procedimientosRepositoryJPA.save(procedimientoEntity);
-        imagenesService.actualizarImagenes(allFiles, params, "procedimientos", procedimientoEntity.getIdProcedimiento());
+        imagenesService.actualizarImagenes(allFiles, params, "procedimientos", procedimientoEntity.getIdProcedimiento()+"");
 
         return new ProcedimientoDto().convertirProcedimientoEntityAProcedimientoDto(updatedEntity);
     }
