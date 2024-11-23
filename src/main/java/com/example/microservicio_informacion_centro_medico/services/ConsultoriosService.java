@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,12 +24,14 @@ public class ConsultoriosService {
     ConsultoriosRepositoryJPA consultoriosRepositoryJPA;
     @Autowired
     ImagenesService imagenesService;
+    @Value(value = "${centro.salud.id}")
+    private Integer centroSaludId;
     public List<ConsultorioDto> obtenerConsultorios() {
         List<ConsultorioEntity>consultoriosEntities=consultoriosRepositoryJPA.findAllByDeletedAtIsNull();
         List<ConsultorioDto>consultoriosDtos=new ArrayList<ConsultorioDto>();
         for(ConsultorioEntity consultorioEntity:consultoriosEntities){
             ConsultorioDto consultorioDto=new ConsultorioDto().convertirConsultorioEntityAConsultorioDto(consultorioEntity);
-            consultorioDto.setImagenes(imagenesService.obtenerImagenes("consultorios", consultorioDto.getIdConsultorio()));
+            consultorioDto.setImagenes(imagenesService.obtenerImagenes("consultorios", Integer.toString(consultorioDto.getIdConsultorio())));
             consultoriosDtos.add(consultorioDto);
         }
         return consultoriosDtos;
@@ -38,7 +41,7 @@ public class ConsultoriosService {
         ConsultorioEntity consultorioEntity = consultoriosRepositoryJPA.findByIdConsultorioAndDeletedAtIsNull(id)
             .orElseThrow(() -> new RuntimeException("Consultorio no encontrada"));
         ConsultorioDto consultorioDto = new ConsultorioDto().convertirConsultorioEntityAConsultorioDto(consultorioEntity);
-        consultorioDto.setImagenes(imagenesService.obtenerImagenes("consultorios", consultorioEntity.getIdConsultorio()));
+        consultorioDto.setImagenes(imagenesService.obtenerImagenes("consultorios", Integer.toString(consultorioDto.getIdConsultorio())));
         return consultorioDto;
     }
 
@@ -53,13 +56,14 @@ public class ConsultoriosService {
         consultorioEntity.setCodigoConsultorio(consultorioDto.getCodigoConsultorio());
         consultorioEntity.setDescripcion(consultorioDto.getDescripcion());
         consultorioEntity.setNumeroTelefono(consultorioDto.getNumeroTelefono());
+        consultorioEntity.setIdCentroSalud(centroSaludId);
         consultorioEntity.setCapacidad(consultorioDto.getCapacidad());
         consultorioEntity.setCreatedAt(consultorioDto.getCreatedAt());
         consultorioEntity.setUpdatedAt(consultorioDto.getUpdatedAt());
         consultorioEntity.setDeletedAt(consultorioDto.getDeletedAt());
         ConsultorioEntity savedEntity = consultoriosRepositoryJPA.save(consultorioEntity);
         List<MultipartFile> imagenes=imagenesService.obtenerImagenesDeArchivos(allFiles);
-        imagenesService.guardarImagenes(imagenes, "consultorios", savedEntity.getIdConsultorio());
+        imagenesService.guardarImagenes(imagenes, "consultorios", savedEntity.getIdConsultorio()+"");
         return new ConsultorioDto().convertirConsultorioEntityAConsultorioDto(savedEntity);    
     }
 
@@ -80,7 +84,7 @@ public class ConsultoriosService {
         consultorioEntity.setUpdatedAt(consultorioDto.getUpdatedAt());
         consultorioEntity.setDeletedAt(consultorioDto.getDeletedAt());
         ConsultorioEntity updatedEntity = consultoriosRepositoryJPA.save(consultorioEntity);
-        imagenesService.actualizarImagenes(allFiles, params, "consultorios", consultorioEntity.getIdConsultorio());
+        imagenesService.actualizarImagenes(allFiles, params, "consultorios", consultorioEntity.getIdConsultorio()+"");
         return new ConsultorioDto().convertirConsultorioEntityAConsultorioDto(updatedEntity);
     }
 

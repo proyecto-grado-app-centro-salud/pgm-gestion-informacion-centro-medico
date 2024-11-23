@@ -57,6 +57,9 @@ public class ConsultorioEntity{
     
     @Column(name = "capacidad", nullable = true)
     private Integer capacidad;
+
+    @Column(name = "id_centro_salud", nullable = true)
+    private Integer idCentroSalud;
     
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)

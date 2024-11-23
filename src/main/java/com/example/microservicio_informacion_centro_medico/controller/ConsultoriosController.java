@@ -65,6 +65,7 @@ public class ConsultoriosController {
             return new ResponseEntity<>(createdConsultorio, HttpStatus.OK);
     
         }catch(Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -77,6 +78,7 @@ public class ConsultoriosController {
             ConsultorioDto updatedConsultorio = consultoriosService.actualizarConsultorio(id, consultorioDto,allFiles,params);
             return new ResponseEntity<>(updatedConsultorio, HttpStatus.OK);
         }catch(Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
       
