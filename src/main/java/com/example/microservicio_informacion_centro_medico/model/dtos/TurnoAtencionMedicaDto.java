@@ -1,6 +1,9 @@
 package com.example.microservicio_informacion_centro_medico.model.dtos;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -17,24 +20,24 @@ import lombok.Setter;
 public class TurnoAtencionMedicaDto {
     private Integer idTurnoAtencionMedica;
     private Integer numeroFichasDisponible;
-    private Date fecha;
+    private String fecha;
     private Integer idConsultorio;
     private String nombreConsultorio;
     private Integer idTurno;
     private String nombreTurno;
     private String horaInicio;
     private String horaFin;
-    private Integer idMedico;
+    private String idMedico;
     private String nombreMedico;
     private Integer idEspecialidad;
     private String nombreEspecialidad;
     public TurnoAtencionMedicaDto convertirTurnoAtencionMedicaEntityTurnoAtencionMedicaDto(TurnosAtencionMedicaEntity turnoAtencionMedicaEntity){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-
         TurnoAtencionMedicaDto turnoAtencionMedicaDto=new TurnoAtencionMedicaDto();
         turnoAtencionMedicaDto.setIdTurnoAtencionMedica(turnoAtencionMedicaEntity.getIdTurnoAtencionMedica());
         turnoAtencionMedicaDto.setNumeroFichasDisponible(turnoAtencionMedicaEntity.getNumeroFichasDisponible());
-        turnoAtencionMedicaDto.setFecha(turnoAtencionMedicaEntity.getFecha());
+        turnoAtencionMedicaDto.setFecha(turnoAtencionMedicaEntity.getFecha().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        // turnoAtencionMedicaDto.setFecha(turnoAtencionMedicaEntity.getFecha());
         turnoAtencionMedicaDto.setIdConsultorio(turnoAtencionMedicaEntity.getConsultorio().getIdConsultorio());
         turnoAtencionMedicaDto.setNombreConsultorio(turnoAtencionMedicaEntity.getConsultorio().getNombre());
         turnoAtencionMedicaDto.setIdTurno(turnoAtencionMedicaEntity.getTurno().getIdTurno());

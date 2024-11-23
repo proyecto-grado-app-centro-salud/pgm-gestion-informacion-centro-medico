@@ -1,5 +1,6 @@
 package com.example.microservicio_informacion_centro_medico.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.example.microservicio_informacion_centro_medico.model.ComunicadoEntity;
 import com.example.microservicio_informacion_centro_medico.model.TurnosAtencionMedicaEntity;
+import com.example.microservicio_informacion_centro_medico.model.UsuarioEntity;
 
 public interface TurnosAtencionMedicaRepositoryJPA extends JpaRepository<TurnosAtencionMedicaEntity, Integer>, JpaSpecificationExecutor<TurnosAtencionMedicaEntity> {
     // @Query(value="SELECT tam.id_turno_atencion_medica,c.nombre,t.nombre,m.nombre,e.nombre,tam.fecha FROM turnos_atencion_medica tam"+
@@ -30,4 +32,14 @@ public interface TurnosAtencionMedicaRepositoryJPA extends JpaRepository<TurnosA
     " WHERE e.idEspecialidad=?1"
     )
     List<TurnosAtencionMedicaEntity> findAllByIdEspecialidad(int idEspecialidad);
+
+    @Query(value = "SELECT m FROM TurnosAtencionMedicaEntity tam"+
+    " INNER JOIN tam.consultorio c"+
+    " INNER JOIN tam.medico m"+
+    " INNER JOIN c.especialidad e"+
+    " WHERE e.idEspecialidad=?1 "+
+    " AND tam.fecha>=?2"+
+    " AND tam.fecha<=?3"
+    )
+    List<UsuarioEntity> findAllMedicosDeEspecialidadEnTurnosDeAtencionMedica(int idEspecialidad, Date fecha, Date fin);
 }

@@ -40,6 +40,8 @@ public class TurnosAtencionMedicaController {
             TurnoAtencionMedicaDto createdEntity = turnosAtencionMedicaService.crearHorarioAtencion(horariosAtencionMedicaEntity);
             return new ResponseEntity<>(createdEntity, HttpStatus.CREATED);
         } catch (Exception e) {
+            e.printStackTrace();
+            // logger.info(e.printStackTrace());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -54,6 +56,7 @@ public class TurnosAtencionMedicaController {
             turnosAtencionMedicaService.eliminarHorarioAtencion(idHorariosAtencionMedica);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -62,11 +65,22 @@ public class TurnosAtencionMedicaController {
     //     return horariosAtencionMedicaRepositoryJPA.findAll();
     // }
     @GetMapping()
-    public ResponseEntity<List<TurnoAtencionMedicaDto>> obtenerHorariosAtencionDetalle(){ 
+    public ResponseEntity<List<TurnoAtencionMedicaDto>> obtenerHorariosAtencionDetalle(@RequestParam(required = false) String fechaInicio,@RequestParam(required = false) String fechaFin,@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer size){ 
         try {
-            List<TurnoAtencionMedicaDto> detalles = turnosAtencionMedicaService.obtenerHorariosAtencionDetalle();
+            List<TurnoAtencionMedicaDto> detalles = turnosAtencionMedicaService.obtenerHorariosAtencionDetalle(fechaInicio,fechaFin,page,size);
             return new ResponseEntity<>(detalles, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/{idHorariosAtencionMedica}")
+    public ResponseEntity<TurnoAtencionMedicaDto>  obtenerHorarioAtencionDetalle(@PathVariable int idHorariosAtencionMedica){ 
+        try {
+            TurnoAtencionMedicaDto detalle = turnosAtencionMedicaService.obtenerHorarioAtencionDetalle(idHorariosAtencionMedica);
+            return new ResponseEntity<>(detalle, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -79,16 +93,7 @@ public class TurnosAtencionMedicaController {
             List<TurnoAtencionMedicaDto> detalles = turnosAtencionMedicaService.obtenerTurnosAtencionMedicaPorEspecialidad(idEspecialidad,fechaInicio,fechaFin,page,size);
             return new ResponseEntity<>(detalles, HttpStatus.OK);
         } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-    @GetMapping("/{idHorariosAtencionMedica}")
-    public ResponseEntity<TurnoAtencionMedicaDto>  obtenerHorarioAtencionDetalle(@PathVariable int idHorariosAtencionMedica){ 
-        try {
-            TurnoAtencionMedicaDto detalle = turnosAtencionMedicaService.obtenerHorarioAtencionDetalle(idHorariosAtencionMedica);
-            return new ResponseEntity<>(detalle, HttpStatus.OK);
-        } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

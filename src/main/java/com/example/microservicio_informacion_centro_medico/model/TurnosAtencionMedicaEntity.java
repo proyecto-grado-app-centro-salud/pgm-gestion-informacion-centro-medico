@@ -1,5 +1,6 @@
 package com.example.microservicio_informacion_centro_medico.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -12,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +35,9 @@ public class TurnosAtencionMedicaEntity {
     @Column(name = "numero_fichas_disponible")
     private int numeroFichasDisponible;
     @Column(name = "fecha")
-    private Date fecha;
+    private LocalDate fecha;
+    // @Temporal(TemporalType.TIMESTAMP)
+    // private Date fecha;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_consultorio", nullable = false)
     private ConsultorioEntity consultorio;

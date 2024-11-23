@@ -2,7 +2,9 @@
 
 package com.example.microservicio_informacion_centro_medico.services;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +43,8 @@ public class TurnosAtencionMedicaService {
     private UsuarioRepositoryJPA usuarioRepositoryJPA;
 
     public TurnoAtencionMedicaDto crearHorarioAtencion(TurnoAtencionMedicaDto turnoAtencionMedicaDto) {
+                // SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         TurnoEntity turnoEntity = turnosRepositoryJPA.findById(turnoAtencionMedicaDto.getIdTurno())
         .orElseThrow(() -> new RuntimeException("Turno no encontrado"));
         ConsultorioEntity consultorioEntity = consultoriosRepositoryJPA.findByIdConsultorioAndDeletedAtIsNull(turnoAtencionMedicaDto.getIdConsultorio())
@@ -48,7 +52,7 @@ public class TurnosAtencionMedicaService {
         UsuarioEntity medicoEntity = usuarioRepositoryJPA.findByIdUsuarioAndDeletedAtIsNull(turnoAtencionMedicaDto.getIdMedico())
         .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
         TurnosAtencionMedicaEntity createdEntity = new TurnosAtencionMedicaEntity();
-        createdEntity.setFecha(turnoAtencionMedicaDto.getFecha());
+        createdEntity.setFecha(LocalDate.parse(turnoAtencionMedicaDto.getFecha(), formato));
         createdEntity.setNumeroFichasDisponible(turnoAtencionMedicaDto.getNumeroFichasDisponible());
         createdEntity.setConsultorio(consultorioEntity);
         createdEntity.setTurno(turnoEntity);
@@ -61,8 +65,22 @@ public class TurnosAtencionMedicaService {
         turnosAtencionMedicaRepositoryJPA.deleteById(idHorariosAtencionMedica);
     }
 
-    public List<TurnoAtencionMedicaDto> obtenerHorariosAtencionDetalle() {
-        List<TurnosAtencionMedicaEntity> turnosAtencionMedicaEntities=turnosAtencionMedicaRepositoryJPA.findAll();
+    public List<TurnoAtencionMedicaDto> obtenerHorariosAtencionDetalle(String fechaInicio, String fechaFin, Integer page, Integer size) {
+        List<TurnosAtencionMedicaEntity>turnosAtencionMedicaEntities=new ArrayList<>();
+        Specification<TurnosAtencionMedicaEntity> spec = Specification.where(null);;
+        if(fechaInicio!=null){
+            spec=spec.and(TurnosAtencionMedicaSpecification.greatherEqualThanFechaInicio(fechaInicio));
+        }
+        if(fechaFin!=null){
+            spec=spec.and(TurnosAtencionMedicaSpecification.lessEqualThanFechaFin(fechaFin));
+        }
+        if(page!=null && size!=null){
+            Pageable pageable = PageRequest.of(page, size);
+            Page<TurnosAtencionMedicaEntity> turnosAtencionMedicaEntitiesPage=turnosAtencionMedicaRepositoryJPA.findAll(spec,pageable);
+            turnosAtencionMedicaEntities=turnosAtencionMedicaEntitiesPage.getContent();
+        }else{
+            turnosAtencionMedicaEntities=turnosAtencionMedicaRepositoryJPA.findAll(spec);
+        }   
         List<TurnoAtencionMedicaDto> turnosAtencionMedicaDtos = turnosAtencionMedicaEntities.stream()
         .map(turno -> new TurnoAtencionMedicaDto().convertirTurnoAtencionMedicaEntityTurnoAtencionMedicaDto(turno))
         .toList();
@@ -98,7 +116,7 @@ public class TurnosAtencionMedicaService {
             .toList();
             return turnosAtencionMedicaDtos;
         }catch(Exception e){
-            throw new RuntimeException("Error en la petición obtenerTurnosAtencionMedicaPorEspecialidad");
+            throw new RuntimeException(e.getMessage());
         }
 
     }
