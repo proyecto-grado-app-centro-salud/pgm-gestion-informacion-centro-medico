@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,8 +40,12 @@ public class EspecialidadesController {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping
-    public ResponseEntity<List<EspecialidadDto>> getEspecialidades() {
-        return new ResponseEntity<>(especialidadesService.obtenerEspecialidades(), HttpStatus.OK);
+    public ResponseEntity<List<EspecialidadDto>> getEspecialidades(@RequestParam(required = false) String nombreEspecialidad,@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer size) {
+        try {
+             return new ResponseEntity<>(especialidadesService.obtenerEspecialidades(nombreEspecialidad,page, size), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping(value = "/{id}")

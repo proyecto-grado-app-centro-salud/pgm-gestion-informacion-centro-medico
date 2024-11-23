@@ -5,12 +5,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.microservicio_informacion_centro_medico.model.EspecialidadEntity;
 import com.example.microservicio_informacion_centro_medico.model.dtos.EspecialidadDto;
 import com.example.microservicio_informacion_centro_medico.repository.EspecialidadesRepositoryJPA;
+import com.example.microservicio_informacion_centro_medico.util.specifications.EspecialidadesSpecification;
 
 @Service
 public class EspecialidadesService {
@@ -18,12 +23,21 @@ public class EspecialidadesService {
     EspecialidadesRepositoryJPA especialidadesRepositoryJPA;
     @Autowired
     ImagenesService imagenesService;
-    public List<EspecialidadDto> obtenerEspecialidades() {
-        List<EspecialidadEntity> especialidadesEntities = especialidadesRepositoryJPA.findAllByDeletedAtIsNull();
+    public List<EspecialidadDto> obtenerEspecialidades(String nombreEspecialidad,Integer page, Integer size) {
+        List<EspecialidadEntity>especialidadesEntities=new ArrayList<>();
+        Specification<EspecialidadEntity> spec = Specification.where(EspecialidadesSpecification.obtenerEspecialidadesPorParametros(nombreEspecialidad));
+        if(page!=null && size!=null){
+            Pageable pageable = PageRequest.of(page, size);
+            Page<EspecialidadEntity> especialidadesEntitiesPage=especialidadesRepositoryJPA.findAll(spec,pageable);
+            especialidadesEntities=especialidadesEntitiesPage.getContent();
+        }else{
+            especialidadesEntities=especialidadesRepositoryJPA.findAll(spec);
+        }   
+        
         List<EspecialidadDto> especialidadesDtos = new ArrayList<>();
         for (EspecialidadEntity especialidadEntity : especialidadesEntities) {
             EspecialidadDto especialidadDto=new EspecialidadDto().convertirEspecialidadEntityAEspecialidadDto(especialidadEntity);
-            especialidadDto.setImagenes(imagenesService.obtenerImagenes("especialidades", especialidadEntity.getIdEspecialidad()));
+            especialidadDto.setImagenes(imagenesService.obtenerImagenes("especialidades", especialidadEntity.getIdEspecialidad()+""));
             especialidadesDtos.add(especialidadDto);
         }
         return especialidadesDtos;
@@ -33,7 +47,7 @@ public class EspecialidadesService {
         EspecialidadEntity especialidadEntity = especialidadesRepositoryJPA.findByIdEspecialidadAndDeletedAtIsNull(id)
             .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));
         EspecialidadDto especialidadDto = new EspecialidadDto().convertirEspecialidadEntityAEspecialidadDto(especialidadEntity);
-        especialidadDto.setImagenes(imagenesService.obtenerImagenes("especialidades", especialidadEntity.getIdEspecialidad()));
+        especialidadDto.setImagenes(imagenesService.obtenerImagenes("especialidades", especialidadEntity.getIdEspecialidad()+""));
         return especialidadDto;
         
     }
@@ -45,7 +59,7 @@ public class EspecialidadesService {
         especialidadEntity.setFechaCreacion(especialidadDto.getFechaCreacion());
         EspecialidadEntity savedEntity = especialidadesRepositoryJPA.save(especialidadEntity);
         List<MultipartFile> imagenes=imagenesService.obtenerImagenesDeArchivos(allFiles);
-        imagenesService.guardarImagenes(imagenes, "especialidades", savedEntity.getIdEspecialidad());
+        imagenesService.guardarImagenes(imagenes, "especialidades", savedEntity.getIdEspecialidad()+"");
         return new EspecialidadDto().convertirEspecialidadEntityAEspecialidadDto(savedEntity);
     }
 
@@ -56,7 +70,7 @@ public class EspecialidadesService {
         especialidadEntity.setDescripcion(especialidadDto.getDescripcion());
         especialidadEntity.setFechaCreacion(especialidadDto.getFechaCreacion());
         EspecialidadEntity updatedEntity = especialidadesRepositoryJPA.save(especialidadEntity);
-        imagenesService.actualizarImagenes(allFiles,params, "especialidades", updatedEntity.getIdEspecialidad());
+        imagenesService.actualizarImagenes(allFiles,params, "especialidades", updatedEntity.getIdEspecialidad()+"");
         return new EspecialidadDto().convertirEspecialidadEntityAEspecialidadDto(updatedEntity);
     }
 
