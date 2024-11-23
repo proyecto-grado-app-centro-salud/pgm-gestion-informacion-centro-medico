@@ -14,6 +14,8 @@ import com.example.microservicio_informacion_centro_medico.model.dtos.TurnoDto;
 import com.example.microservicio_informacion_centro_medico.model.util.specifications.TurnosSpecification;
 import com.example.microservicio_informacion_centro_medico.repository.TurnosRepositoryJPA;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -29,13 +31,14 @@ public class TurnosService {
     public void eliminarTurno(int idTurno) {
         turnosRepositoryJPA.deleteById(idTurno);
     }
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
     public TurnoDto actualizarTurno(int idTurno, TurnoDto turnoDto) {
         TurnoEntity turnoEntity = turnosRepositoryJPA.findById(idTurno)
                 .orElseThrow(() -> new RuntimeException("Turno no encontrado"));
         
         turnoEntity.setNombre(turnoDto.getNombre());
-        turnoEntity.setHoraInicio(turnoDto.getHoraInicio());
-        turnoEntity.setHoraFin(turnoDto.getHoraFin());
+        turnoEntity.setHoraInicio(LocalTime.parse(turnoDto.getHoraInicio(),formatter));
+        turnoEntity.setHoraFin(LocalTime.parse(turnoDto.getHoraFin(),formatter));
 
         TurnoEntity updatedEntity = turnosRepositoryJPA.save(turnoEntity);
         return new TurnoDto().convertirTurnoEntityTurnoDto(updatedEntity);
@@ -43,8 +46,8 @@ public class TurnosService {
     public TurnoDto crearTurno(TurnoDto turnoDto) {
         TurnoEntity turnoEntity = new TurnoEntity();
         turnoEntity.setNombre(turnoDto.getNombre());
-        turnoEntity.setHoraInicio(turnoDto.getHoraInicio());
-        turnoEntity.setHoraFin(turnoDto.getHoraFin());
+        turnoEntity.setHoraInicio(LocalTime.parse(turnoDto.getHoraInicio(),formatter));
+        turnoEntity.setHoraFin(LocalTime.parse(turnoDto.getHoraFin(),formatter));
         TurnoEntity turnoCreado = turnosRepositoryJPA.save(turnoEntity);
         return new TurnoDto().convertirTurnoEntityTurnoDto(turnoCreado);
     }
