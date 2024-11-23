@@ -32,9 +32,9 @@ public class ComunicadosController {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping(value = "/v1.0/comunicados")
-    public ResponseEntity<List<ComunicadoDto>> getComunicados() {
+    public ResponseEntity<List<ComunicadoDto>> getComunicados(@RequestParam(required = false) String tituloComunicado,@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer size) {
         try {
-            return new ResponseEntity<>(comunicadosService.obtenerComunicados(), HttpStatus.OK);
+            return new ResponseEntity<>(comunicadosService.obtenerComunicados(tituloComunicado, page, size), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
