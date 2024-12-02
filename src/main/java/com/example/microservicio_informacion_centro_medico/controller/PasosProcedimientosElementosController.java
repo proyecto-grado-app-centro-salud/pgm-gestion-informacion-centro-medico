@@ -36,6 +36,7 @@ public class PasosProcedimientosElementosController {
         try {
             return new ResponseEntity<>(pasosProcedimientosService.obtenerPasosDeProcedimiento(idProcedimiento,idElemento,tipoElemento), HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             logger.info(e.getMessage());
             new RuntimeException(e);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -49,6 +50,7 @@ public class PasosProcedimientosElementosController {
             pasosProcedimientosService.crearPasoProcedimientoElemento(idProcedimiento, idPaso, idElemento, tipoElemento);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -59,6 +61,7 @@ public class PasosProcedimientosElementosController {
             pasosProcedimientosService.eliminarPasoProcedimientoElemento(idProcedimiento,idPaso,idElemento,tipoElemento);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

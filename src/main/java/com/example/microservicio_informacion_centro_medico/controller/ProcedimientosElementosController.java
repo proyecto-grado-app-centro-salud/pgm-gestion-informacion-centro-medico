@@ -37,6 +37,7 @@ public class ProcedimientosElementosController {
         } catch (Exception e) {
             logger.info(e.getMessage());
             new RuntimeException(e);
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -47,6 +48,7 @@ public class ProcedimientosElementosController {
         } catch (Exception e) {
             logger.info(e.getMessage());
             new RuntimeException(e);
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -57,6 +59,7 @@ public class ProcedimientosElementosController {
         } catch (Exception e) {
             logger.info(e.getMessage());
             new RuntimeException(e);
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -68,6 +71,7 @@ public class ProcedimientosElementosController {
             procedimientosElementosService.crearProcedimientoElemento(idProcedimiento, idElemento, tipoElemento,procedimientoElementoDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -78,6 +82,7 @@ public class ProcedimientosElementosController {
             procedimientosElementosService.eliminarProcedimientoElemento(idProcedimiento, idElemento, tipoElemento);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

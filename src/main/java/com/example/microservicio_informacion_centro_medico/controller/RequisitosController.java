@@ -37,6 +37,7 @@ public class RequisitosController {
         try {
             return new ResponseEntity<>(requisitosService.obtenerRequisitos(), HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -47,6 +48,7 @@ public class RequisitosController {
             RequisitoDto requisitoDto = requisitosService.obtenerRequisitoPorId(id);
             return new ResponseEntity<>(requisitoDto, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -59,6 +61,7 @@ public class RequisitosController {
             RequisitoDto createdRequisito = requisitosService.crearRequisito(requisitoDto, allFiles);
             return new ResponseEntity<>(createdRequisito, HttpStatus.CREATED);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -71,6 +74,7 @@ public class RequisitosController {
             RequisitoDto updatedRequisito = requisitosService.actualizarRequisito(id, requisitoDto, allFiles,params);
             return new ResponseEntity<>(updatedRequisito, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -81,6 +85,7 @@ public class RequisitosController {
             requisitosService.eliminarRequisito(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

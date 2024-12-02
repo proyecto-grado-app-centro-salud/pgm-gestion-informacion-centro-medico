@@ -23,10 +23,10 @@ import com.example.microservicio_informacion_centro_medico.services.ComunicadosS
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
-@RequestMapping()
+@RequestMapping()   
 public class ComunicadosController {
 
-    @Autowired
+    @Autowired      
     private ComunicadosService comunicadosService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -36,6 +36,7 @@ public class ComunicadosController {
         try {
             return new ResponseEntity<>(comunicadosService.obtenerComunicados(tituloComunicado, page, size), HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -46,6 +47,7 @@ public class ComunicadosController {
             ComunicadoDto comunicadoDto = comunicadosService.obtenerComunicadoPorId(id);
             return new ResponseEntity<>(comunicadoDto, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -57,6 +59,7 @@ public class ComunicadosController {
             ComunicadoDto createdComunicado = comunicadosService.crearComunicado(comunicadoDto,allFiles);
             return new ResponseEntity<>(createdComunicado, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -69,6 +72,7 @@ public class ComunicadosController {
             ComunicadoDto updatedComunicado = comunicadosService.actualizarComunicado(id, comunicadoDto,allFiles,params);
             return new ResponseEntity<>(updatedComunicado, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -79,6 +83,7 @@ public class ComunicadosController {
             comunicadosService.eliminarComunicado(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -17,7 +17,9 @@ public class MedicosSpecification {
             return (root,query,builder) -> {
                 Join<RolUsuarioEntity,UsuarioEntity> usuarioJoin = root.join("usuario");
                 Join<RolUsuarioEntity,RolEntity> rolJoin = root.join("rol");
+
                 Predicate predicadoFinal = builder.equal(rolJoin.get("idRol"), 2);
+                predicadoFinal = builder.and(predicadoFinal,builder.isNull(root.get("deletedAt")));
                 if(nombreUsuario!=null){
                     Predicate predicadoNombres = builder.or(
                         builder.like(builder.lower(usuarioJoin.get("nombres")), "%" + nombreUsuario.toLowerCase() + "%"),

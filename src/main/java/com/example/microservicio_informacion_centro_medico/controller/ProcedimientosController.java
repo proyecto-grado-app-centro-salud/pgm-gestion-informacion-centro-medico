@@ -38,6 +38,7 @@ public class ProcedimientosController {
         try {
             return new ResponseEntity<>(procedimientosService.obtenerProcedimientos(), HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -48,6 +49,7 @@ public class ProcedimientosController {
             ProcedimientoDto procedimientoDto = procedimientosService.obtenerProcedimientoPorId(id);
             return new ResponseEntity<>(procedimientoDto, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -60,6 +62,7 @@ public class ProcedimientosController {
             ProcedimientoDto createdProcedimiento = procedimientosService.crearProcedimiento(procedimientoDto, allFiles);
             return new ResponseEntity<>(createdProcedimiento, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -73,6 +76,7 @@ public class ProcedimientosController {
             ProcedimientoDto updatedProcedimiento = procedimientosService.actualizarProcedimiento(id, procedimientoDto, allFiles, params);
             return new ResponseEntity<>(updatedProcedimiento, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -84,6 +88,7 @@ public class ProcedimientosController {
             procedimientosService.eliminarProcedimiento(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

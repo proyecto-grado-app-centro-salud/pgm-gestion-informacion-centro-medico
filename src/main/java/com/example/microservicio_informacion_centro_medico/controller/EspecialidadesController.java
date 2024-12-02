@@ -44,17 +44,24 @@ public class EspecialidadesController {
         try {
              return new ResponseEntity<>(especialidadesService.obtenerEspecialidades(nombreEspecialidad,page, size), HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<EspecialidadDto> getEspecialidadById(@PathVariable int id) {
-        EspecialidadDto especialidadDto = especialidadesService.obtenerEspecialidadPorId(id);
-        if (especialidadDto != null) {
-            return new ResponseEntity<>(especialidadDto, HttpStatus.OK);
-        } else {
+        try {
+            EspecialidadDto especialidadDto = especialidadesService.obtenerEspecialidadPorId(id);
+            if (especialidadDto != null) {
+                return new ResponseEntity<>(especialidadDto, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         }
     }
 
@@ -66,6 +73,7 @@ public class EspecialidadesController {
             EspecialidadDto createdEspecialidad = especialidadesService.crearEspecialidad(especialidadDto, allFiles);
             return new ResponseEntity<>(createdEspecialidad, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -78,6 +86,7 @@ public class EspecialidadesController {
             EspecialidadDto updatedEspecialidad = especialidadesService.actualizarEspecialidad(id,especialidadDto,allFiles,params);
             return new ResponseEntity<>(updatedEspecialidad, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -88,6 +97,7 @@ public class EspecialidadesController {
             especialidadesService.deleteEspecialidad(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

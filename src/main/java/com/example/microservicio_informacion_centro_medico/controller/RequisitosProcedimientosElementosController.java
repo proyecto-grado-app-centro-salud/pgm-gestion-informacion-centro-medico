@@ -40,6 +40,7 @@ public class RequisitosProcedimientosElementosController {
         } catch (Exception e) {
             logger.info(e.getMessage());
             new RuntimeException(e);
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -51,6 +52,7 @@ public class RequisitosProcedimientosElementosController {
             requisitosProcedimientosElementosService.crearRequisitoProcedimientoElemento(idProcedimiento, idRequisito, idElemento, tipoElemento);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -61,6 +63,7 @@ public class RequisitosProcedimientosElementosController {
             requisitosProcedimientosElementosService.eliminarRequisitoProcedimientoElemento(idProcedimiento,idRequisito,idElemento,tipoElemento);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

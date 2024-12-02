@@ -43,6 +43,8 @@ public class ConsultoriosController {
         try{
             return new ResponseEntity<List<ConsultorioDto>>(consultoriosService.obtenerConsultorios(),HttpStatus.OK);
         }catch(Exception e){
+            e.printStackTrace();
+
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -52,6 +54,8 @@ public class ConsultoriosController {
             ConsultorioDto consultorioDto = consultoriosService.obtenerConsultorioPorId(id);
             return new ResponseEntity<>(consultorioDto, HttpStatus.OK);
         } catch(Exception e) {
+            e.printStackTrace();
+
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -90,6 +94,7 @@ public class ConsultoriosController {
             consultoriosService.eliminarConsultorio(id);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch(Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         

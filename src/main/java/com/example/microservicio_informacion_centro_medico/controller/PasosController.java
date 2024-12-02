@@ -35,6 +35,7 @@ public class PasosController {
         try {
             return new ResponseEntity<>(pasosService.obtenerPasos(), HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -45,6 +46,7 @@ public class PasosController {
             PasoDto pasoDto = pasosService.obtenerPasoPorId(id);
             return new ResponseEntity<>(pasoDto, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -57,6 +59,7 @@ public class PasosController {
             PasoDto createdPaso = pasosService.crearPaso(pasoDto, allFiles);
             return new ResponseEntity<>(createdPaso, HttpStatus.CREATED);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -69,6 +72,7 @@ public class PasosController {
             PasoDto updatedPaso = pasosService.actualizarPaso(id, pasoDto, allFiles,params);
             return new ResponseEntity<>(updatedPaso, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -79,6 +83,7 @@ public class PasosController {
             pasosService.eliminarPaso(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

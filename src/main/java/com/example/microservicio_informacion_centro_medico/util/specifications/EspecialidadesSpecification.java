@@ -16,7 +16,7 @@ public class EspecialidadesSpecification {
     public static Specification<EspecialidadEntity> obtenerEspecialidadesPorParametros(String nombreEspecialidad) {
         try {
             return (root,query,builder) -> {
-                Predicate predicadoFinal = builder.conjunction();
+                Predicate predicadoFinal =builder.isNull(root.get("deletedAt"));
                 if(nombreEspecialidad!=null){
                     predicadoFinal = builder.and(predicadoFinal,builder.like(root.get("nombre"), "%"+nombreEspecialidad+"%"));
                 }

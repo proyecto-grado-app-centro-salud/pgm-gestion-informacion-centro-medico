@@ -38,6 +38,7 @@ public class MedicosController {
         try {
              return new ResponseEntity<>(medicosService.obtenerEquipoMedico(nombreMedico,page, size), HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -51,6 +52,7 @@ public class MedicosController {
             List<MedicoDto> listadoMedico=medicosService.obtenerMedicosEspecialitasPorEspecialidad(idEspecialidad,fechaInicio,fechaFin);
             return new ResponseEntity<List<MedicoDto>>(listadoMedico, HttpStatus.OK);
         }catch(Exception e){
+            e.printStackTrace();
             logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
