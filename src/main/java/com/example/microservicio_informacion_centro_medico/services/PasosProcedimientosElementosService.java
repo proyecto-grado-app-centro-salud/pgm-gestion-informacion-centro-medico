@@ -19,6 +19,7 @@ import com.example.microservicio_informacion_centro_medico.repository.PasosRepos
 import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosElementosPasosRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosElementosRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosRepositoryJPA;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Service
 public class PasosProcedimientosElementosService {
@@ -41,7 +42,7 @@ public class PasosProcedimientosElementosService {
     @Autowired
     ImagenesService imagenesService;
 
-    public List<PasoDto> obtenerPasosDeProcedimiento(int idProcedimiento, int idElemento, String tipoElemento) {
+    public List<PasoDto> obtenerPasosDeProcedimiento(int idProcedimiento, int idElemento, String tipoElemento) throws JsonProcessingException {
 
         procedimientosElementosService.verificarExisteciaElemento(idElemento,tipoElemento);
 
@@ -63,7 +64,7 @@ public class PasosProcedimientosElementosService {
     }
 
 
-    public void eliminarPasoProcedimientoElemento(int idProcedimiento, int idPaso, int idElemento, String tipoElemento) {
+    public void eliminarPasoProcedimientoElemento(int idProcedimiento, int idPaso, int idElemento, String tipoElemento) throws JsonProcessingException {
         procedimientosElementosService.verificarExisteciaElemento(idElemento,tipoElemento);
 
         ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)
@@ -82,7 +83,7 @@ public class PasosProcedimientosElementosService {
     }
 
 
-    public void crearPasoProcedimientoElemento(int idProcedimiento, int idPaso, int idElemento, String tipoElemento) {
+    public void crearPasoProcedimientoElemento(int idProcedimiento, int idPaso, int idElemento, String tipoElemento) throws JsonProcessingException {
         procedimientosElementosService.verificarExisteciaElemento(idElemento,tipoElemento);
 
         ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)

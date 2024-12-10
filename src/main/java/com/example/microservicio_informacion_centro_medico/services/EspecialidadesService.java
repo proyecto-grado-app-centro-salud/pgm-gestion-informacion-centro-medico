@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +18,7 @@ import com.example.microservicio_informacion_centro_medico.model.EspecialidadEnt
 import com.example.microservicio_informacion_centro_medico.model.dtos.EspecialidadDto;
 import com.example.microservicio_informacion_centro_medico.repository.EspecialidadesRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.util.specifications.EspecialidadesSpecification;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Service
 public class EspecialidadesService {
@@ -23,7 +26,7 @@ public class EspecialidadesService {
     EspecialidadesRepositoryJPA especialidadesRepositoryJPA;
     @Autowired
     ImagenesService imagenesService;
-    public List<EspecialidadDto> obtenerEspecialidades(String nombreEspecialidad,Integer page, Integer size) {
+    public List<EspecialidadDto> obtenerEspecialidades(String nombreEspecialidad,Integer page, Integer size) throws JsonProcessingException {
         List<EspecialidadEntity>especialidadesEntities=new ArrayList<>();
         Specification<EspecialidadEntity> spec = Specification.where(EspecialidadesSpecification.obtenerEspecialidadesPorParametros(nombreEspecialidad));
         if(page!=null && size!=null){
@@ -43,7 +46,7 @@ public class EspecialidadesService {
         return especialidadesDtos;
     }
 
-    public EspecialidadDto obtenerEspecialidadPorId(int id) {
+    public EspecialidadDto obtenerEspecialidadPorId(int id) throws JsonProcessingException {
         EspecialidadEntity especialidadEntity = especialidadesRepositoryJPA.findByIdEspecialidadAndDeletedAtIsNull(id)
             .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));
         EspecialidadDto especialidadDto = new EspecialidadDto().convertirEspecialidadEntityAEspecialidadDto(especialidadEntity);
@@ -52,23 +55,28 @@ public class EspecialidadesService {
         
     }
 
-    public EspecialidadDto crearEspecialidad(EspecialidadDto especialidadDto, Map<String, MultipartFile> allFiles) {
+    public EspecialidadDto crearEspecialidad(EspecialidadDto especialidadDto, Map<String, MultipartFile> allFiles) throws JsonProcessingException {
         EspecialidadEntity especialidadEntity = new EspecialidadEntity();
         especialidadEntity.setNombre(especialidadDto.getNombre());
         especialidadEntity.setDescripcion(especialidadDto.getDescripcion());
         especialidadEntity.setFechaCreacion(especialidadDto.getFechaCreacion());
+        logger.info(especialidadDto.getPermisos().toString());
+        especialidadEntity.setPermisosJson(especialidadDto.getPermisos());
         EspecialidadEntity savedEntity = especialidadesRepositoryJPA.save(especialidadEntity);
         List<MultipartFile> imagenes=imagenesService.obtenerImagenesDeArchivos(allFiles);
         imagenesService.guardarImagenes(imagenes, "especialidades", savedEntity.getIdEspecialidad()+"");
         return new EspecialidadDto().convertirEspecialidadEntityAEspecialidadDto(savedEntity);
     }
+    Logger logger = LoggerFactory.getLogger(EspecialidadesService.class);
 
-    public EspecialidadDto actualizarEspecialidad(int id, EspecialidadDto especialidadDto, Map<String, MultipartFile> allFiles,Map<String, String> params) {
+    public EspecialidadDto actualizarEspecialidad(int id, EspecialidadDto especialidadDto, Map<String, MultipartFile> allFiles,Map<String, String> params) throws JsonProcessingException {
         EspecialidadEntity especialidadEntity = especialidadesRepositoryJPA.findByIdEspecialidadAndDeletedAtIsNull(id)
         .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));
         especialidadEntity.setNombre(especialidadDto.getNombre());
         especialidadEntity.setDescripcion(especialidadDto.getDescripcion());
         especialidadEntity.setFechaCreacion(especialidadDto.getFechaCreacion());
+        logger.info(especialidadDto.getPermisos().toString());
+        especialidadEntity.setPermisosJson(especialidadDto.getPermisos());
         EspecialidadEntity updatedEntity = especialidadesRepositoryJPA.save(especialidadEntity);
         imagenesService.actualizarImagenes(allFiles,params, "especialidades", updatedEntity.getIdEspecialidad()+"");
         return new EspecialidadDto().convertirEspecialidadEntityAEspecialidadDto(updatedEntity);

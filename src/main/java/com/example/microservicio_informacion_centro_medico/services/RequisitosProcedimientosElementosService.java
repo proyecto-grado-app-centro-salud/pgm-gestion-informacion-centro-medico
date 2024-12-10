@@ -23,6 +23,7 @@ import com.example.microservicio_informacion_centro_medico.repository.Procedimie
 import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosElementosRequisitosRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.repository.RequisitosRepositoryJPA;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Service
 public class RequisitosProcedimientosElementosService {
@@ -46,7 +47,7 @@ public class RequisitosProcedimientosElementosService {
     @Autowired
     private ProcedimientosRepositoryJPA procedimientosRepositoryJPA;
 
-    public List<RequisitoDto> obtenerRequisitosDeProcedimientoElemento(int idProcedimiento, int idElemento, String tipoElemento) {
+    public List<RequisitoDto> obtenerRequisitosDeProcedimientoElemento(int idProcedimiento, int idElemento, String tipoElemento) throws JsonProcessingException {
 
 
         procedimientosElementosService.verificarExisteciaElemento(idElemento,tipoElemento);
@@ -69,7 +70,7 @@ public class RequisitosProcedimientosElementosService {
     }
 
 
-    public void eliminarRequisitoProcedimientoElemento(int idProcedimiento, int idRequisito, int idElemento, String tipoElemento) {
+    public void eliminarRequisitoProcedimientoElemento(int idProcedimiento, int idRequisito, int idElemento, String tipoElemento) throws JsonProcessingException {
         procedimientosElementosService.verificarExisteciaElemento(idElemento,tipoElemento);
 
         ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)
@@ -89,7 +90,7 @@ public class RequisitosProcedimientosElementosService {
     }
 
 
-    public void crearRequisitoProcedimientoElemento(int idProcedimiento, int idRequisito, int idElemento, String tipoElemento) {
+    public void crearRequisitoProcedimientoElemento(int idProcedimiento, int idRequisito, int idElemento, String tipoElemento) throws JsonProcessingException {
         procedimientosElementosService.verificarExisteciaElemento(idElemento,tipoElemento);
 
         ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)

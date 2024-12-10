@@ -39,7 +39,7 @@ public class ProcedimientosElementosController {
             new RuntimeException(e);
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        }   
     }
     @GetMapping(value = "/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}")
     public ResponseEntity<ProcedimientoDto> getProcedimientoDeElemento(@PathVariable int idProcedimiento,@PathVariable int idElemento,@PathVariable String tipoElemento) {

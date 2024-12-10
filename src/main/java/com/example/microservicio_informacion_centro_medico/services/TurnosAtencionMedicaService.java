@@ -53,7 +53,8 @@ public class TurnosAtencionMedicaService {
         .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
         TurnosAtencionMedicaEntity createdEntity = new TurnosAtencionMedicaEntity();
         createdEntity.setFecha(LocalDate.parse(turnoAtencionMedicaDto.getFecha(), formato));
-        createdEntity.setNumeroFichasDisponible(turnoAtencionMedicaDto.getNumeroFichasDisponible());
+        createdEntity.setNumeroFichasDisponible(turnoAtencionMedicaDto.getNumeroFichasAsignado());
+        createdEntity.setNumeroFichasAsignado(turnoAtencionMedicaDto.getNumeroFichasAsignado());
         createdEntity.setConsultorio(consultorioEntity);
         createdEntity.setTurno(turnoEntity);
         createdEntity.setMedico(medicoEntity);

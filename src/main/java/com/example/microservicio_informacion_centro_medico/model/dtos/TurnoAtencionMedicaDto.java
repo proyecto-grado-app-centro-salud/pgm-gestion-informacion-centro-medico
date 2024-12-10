@@ -20,6 +20,7 @@ import lombok.Setter;
 public class TurnoAtencionMedicaDto {
     private Integer idTurnoAtencionMedica;
     private Integer numeroFichasDisponible;
+    private Integer numeroFichasAsignado;
     private String fecha;
     private Integer idConsultorio;
     private String nombreConsultorio;
@@ -36,6 +37,7 @@ public class TurnoAtencionMedicaDto {
         TurnoAtencionMedicaDto turnoAtencionMedicaDto=new TurnoAtencionMedicaDto();
         turnoAtencionMedicaDto.setIdTurnoAtencionMedica(turnoAtencionMedicaEntity.getIdTurnoAtencionMedica());
         turnoAtencionMedicaDto.setNumeroFichasDisponible(turnoAtencionMedicaEntity.getNumeroFichasDisponible());
+        turnoAtencionMedicaDto.setNumeroFichasAsignado(turnoAtencionMedicaEntity.getNumeroFichasAsignado());
         turnoAtencionMedicaDto.setFecha(turnoAtencionMedicaEntity.getFecha().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         // turnoAtencionMedicaDto.setFecha(turnoAtencionMedicaEntity.getFecha());
         turnoAtencionMedicaDto.setIdConsultorio(turnoAtencionMedicaEntity.getConsultorio().getIdConsultorio());
