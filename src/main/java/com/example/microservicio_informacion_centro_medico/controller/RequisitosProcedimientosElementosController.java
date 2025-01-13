@@ -27,6 +27,8 @@ import com.example.microservicio_informacion_centro_medico.services.Procedimient
 import com.example.microservicio_informacion_centro_medico.services.RequisitosProcedimientosElementosService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.annotation.security.PermitAll;
+
 @RestController
 @RequestMapping("/v1.0/procedimientos")
 public class RequisitosProcedimientosElementosController {
@@ -34,6 +36,7 @@ public class RequisitosProcedimientosElementosController {
     private RequisitosProcedimientosElementosService requisitosProcedimientosElementosService;
     private static final Logger logger = LoggerFactory.getLogger(PasosProcedimientosElementosController.class);
     @GetMapping(value = "/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/requisitos")
+    @PermitAll
     public ResponseEntity<List<RequisitoDto>> getPasosProcedimiento(@PathVariable int idProcedimiento,@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
             return new ResponseEntity<>(requisitosProcedimientosElementosService.obtenerRequisitosDeProcedimientoElemento(idProcedimiento,idElemento,tipoElemento), HttpStatus.OK);
@@ -47,6 +50,7 @@ public class RequisitosProcedimientosElementosController {
 
 
     @PostMapping(value = "/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/requisitos/{idRequisito}")
+    @PermitAll
     public ResponseEntity<Void> createRequisitoProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idRequisito,@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
             requisitosProcedimientosElementosService.crearRequisitoProcedimientoElemento(idProcedimiento, idRequisito, idElemento, tipoElemento);
@@ -58,6 +62,7 @@ public class RequisitosProcedimientosElementosController {
     }
 
     @DeleteMapping("/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/requisitos/{idRequisito}")
+    @PermitAll
     public ResponseEntity<Void> deleteRequisitoProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idRequisito,@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
             requisitosProcedimientosElementosService.eliminarRequisitoProcedimientoElemento(idProcedimiento,idRequisito,idElemento,tipoElemento);

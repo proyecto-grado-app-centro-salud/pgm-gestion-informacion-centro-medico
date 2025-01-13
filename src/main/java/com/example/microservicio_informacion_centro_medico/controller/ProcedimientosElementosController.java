@@ -23,6 +23,8 @@ import com.example.microservicio_informacion_centro_medico.services.PasosProcedi
 import com.example.microservicio_informacion_centro_medico.services.ProcedimientosElementosService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.annotation.security.PermitAll;
+
 @RestController
 @RequestMapping("/v1.0/procedimientos")
 public class ProcedimientosElementosController {
@@ -31,6 +33,7 @@ public class ProcedimientosElementosController {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private static final Logger logger = LoggerFactory.getLogger(PasosProcedimientosElementosController.class);
     @GetMapping(value = "/elementos/{idElemento}/tipo-elemento/{tipoElemento}")
+    @PermitAll
     public ResponseEntity<List<ProcedimientoDto>> getProcedimientosDeElemento(@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
             return new ResponseEntity<>(procedimientosElementosService.obtenerProcedimientosDeElemento(idElemento,tipoElemento), HttpStatus.OK);
@@ -42,6 +45,7 @@ public class ProcedimientosElementosController {
         }   
     }
     @GetMapping(value = "/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}")
+    @PermitAll
     public ResponseEntity<ProcedimientoDto> getProcedimientoDeElemento(@PathVariable int idProcedimiento,@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
             return new ResponseEntity<>(procedimientosElementosService.obtenerProcedimientoDeElemento(idProcedimiento,idElemento,tipoElemento), HttpStatus.OK);
@@ -53,6 +57,7 @@ public class ProcedimientosElementosController {
         }
     }
     @GetMapping(value = "/{idProcedimiento}/elementos")
+    @PermitAll
     public ResponseEntity<List<ProcedimientoElementoDto>> getProcedimientoElementoByIdProcedimiento(@PathVariable int idProcedimiento) {
         try {
             return new ResponseEntity<>(procedimientosElementosService.obtenerElementosDeProcedimiento(idProcedimiento), HttpStatus.OK);
@@ -65,6 +70,7 @@ public class ProcedimientosElementosController {
     }
 
     @PostMapping(value = "/{idProcedimiento}/tipo-elemento/{tipoElemento}/elementos/{idElemento}")
+    @PermitAll
     public ResponseEntity<Void> createProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idElemento,@PathVariable String tipoElemento, @RequestParam("data") String data) {
         try {
             ProcedimientoElementoDto procedimientoElementoDto = objectMapper.readValue(data, ProcedimientoElementoDto.class);
@@ -77,6 +83,7 @@ public class ProcedimientosElementosController {
     }
 
     @DeleteMapping("/{idProcedimiento}/tipo-elemento/{tipoElemento}/elementos/{idElemento}")
+    @PermitAll
     public ResponseEntity<Void> deleteProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
             procedimientosElementosService.eliminarProcedimientoElemento(idProcedimiento, idElemento, tipoElemento);

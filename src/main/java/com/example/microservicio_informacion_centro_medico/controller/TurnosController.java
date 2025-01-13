@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.microservicio_informacion_centro_medico.model.TurnoEntity;
 import com.example.microservicio_informacion_centro_medico.repository.TurnosRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.services.TurnosService;
+
+import jakarta.annotation.security.PermitAll;
+
 import com.example.microservicio_informacion_centro_medico.model.dtos.TurnoDto;
 
 
@@ -31,6 +34,7 @@ public class TurnosController {
     private TurnosService turnosService;
 
     @PostMapping
+    @PermitAll
     public ResponseEntity<TurnoDto> crearTurno(@RequestBody TurnoDto turnoDto) {
         try {
             TurnoDto createdEntity = turnosService.crearTurno(turnoDto);
@@ -42,6 +46,7 @@ public class TurnosController {
     }
 
     @DeleteMapping("/{idTurno}")
+    @PermitAll
     public ResponseEntity<Void> eliminarTurno(@PathVariable int idTurno) {
         try {
             turnosService.eliminarTurno(idTurno);
@@ -53,6 +58,7 @@ public class TurnosController {
     }
 
     @GetMapping
+    @PermitAll
     public ResponseEntity<List<TurnoDto>> obtenerTodosLosTurnos(@RequestParam(required = false) String horaInicio,@RequestParam(required = false) String horaFin,@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer size) {
         try {
             List<TurnoDto> turnos = turnosService.obtenerTodosLosTurnos(horaInicio,horaFin,page,size);
@@ -64,6 +70,7 @@ public class TurnosController {
     }
 
     @GetMapping("/{idTurno}")
+    @PermitAll
     public ResponseEntity<TurnoDto> obtenerTurnoPorId(@PathVariable int idTurno) {
         try {
             TurnoDto turno = turnosService.obtenerTurnoPorId(idTurno);
@@ -75,6 +82,7 @@ public class TurnosController {
     }
 
     @PutMapping("/{idTurno}")
+    @PermitAll
     public ResponseEntity<TurnoDto> actualizarTurno(@PathVariable int idTurno, @RequestBody TurnoDto turnoDto) {
         try {
             TurnoDto updatedEntity = turnosService.actualizarTurno(idTurno, turnoDto);

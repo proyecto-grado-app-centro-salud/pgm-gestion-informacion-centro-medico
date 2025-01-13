@@ -25,6 +25,8 @@ import com.example.microservicio_informacion_centro_medico.services.PasosProcedi
 import com.example.microservicio_informacion_centro_medico.services.ProcedimientosService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.annotation.security.PermitAll;
+
 @RestController
 @RequestMapping("/v1.0/procedimientos")
 public class PasosProcedimientosElementosController {
@@ -32,6 +34,7 @@ public class PasosProcedimientosElementosController {
     private PasosProcedimientosElementosService pasosProcedimientosService;
     private static final Logger logger = LoggerFactory.getLogger(PasosProcedimientosElementosController.class);
     @GetMapping(value = "/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/pasos")
+    @PermitAll
     public ResponseEntity<List<PasoDto>> getPasosProcedimiento(@PathVariable int idProcedimiento,@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
             return new ResponseEntity<>(pasosProcedimientosService.obtenerPasosDeProcedimiento(idProcedimiento,idElemento,tipoElemento), HttpStatus.OK);
@@ -45,6 +48,7 @@ public class PasosProcedimientosElementosController {
 
 
     @PostMapping(value = "/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/pasos/{idPaso}")
+    @PermitAll
     public ResponseEntity<Void> createPasoProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idPaso,@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
             pasosProcedimientosService.crearPasoProcedimientoElemento(idProcedimiento, idPaso, idElemento, tipoElemento);
@@ -56,6 +60,7 @@ public class PasosProcedimientosElementosController {
     }
 
     @DeleteMapping("/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/pasos/{idPaso}")
+    @PermitAll
     public ResponseEntity<Void> deletePasoProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idPaso,@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
             pasosProcedimientosService.eliminarPasoProcedimientoElemento(idProcedimiento,idPaso,idElemento,tipoElemento);

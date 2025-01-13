@@ -27,6 +27,8 @@ import com.example.microservicio_informacion_centro_medico.repository.Especialid
 import com.example.microservicio_informacion_centro_medico.services.EspecialidadesService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.annotation.security.PermitAll;
+
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -40,6 +42,7 @@ public class EspecialidadesController {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping
+    @PermitAll
     public ResponseEntity<List<EspecialidadDto>> getEspecialidades(@RequestParam(required = false) String nombreEspecialidad,@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer size) {
         try {
              return new ResponseEntity<>(especialidadesService.obtenerEspecialidades(nombreEspecialidad,page, size), HttpStatus.OK);
@@ -50,6 +53,7 @@ public class EspecialidadesController {
     }
 
     @GetMapping(value = "/{id}")
+    @PermitAll
     public ResponseEntity<EspecialidadDto> getEspecialidadById(@PathVariable int id) {
         try {
             EspecialidadDto especialidadDto = especialidadesService.obtenerEspecialidadPorId(id);
@@ -66,6 +70,7 @@ public class EspecialidadesController {
     }
 
     @PostMapping()
+    @PermitAll
     public ResponseEntity<EspecialidadDto> createEspecialidad(@RequestParam("data") String data,
     @RequestParam Map<String, MultipartFile> allFiles) {
         try {
@@ -79,6 +84,7 @@ public class EspecialidadesController {
     }
 
     @PutMapping(value = "/{id}")
+    @PermitAll
     public ResponseEntity<EspecialidadDto> updateEspecialidad(@PathVariable int id,@RequestParam("data") String data,
     @RequestParam Map<String, MultipartFile> allFiles,@RequestParam Map<String, String> params) {
         try {
@@ -92,6 +98,7 @@ public class EspecialidadesController {
     }
 
     @DeleteMapping(value = "/{id}")
+    @PermitAll
     public ResponseEntity<Void> deleteEspecialidad(@PathVariable int id) {
         try{
             especialidadesService.deleteEspecialidad(id);

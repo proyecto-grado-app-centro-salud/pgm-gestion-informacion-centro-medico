@@ -28,6 +28,8 @@ import com.example.microservicio_informacion_centro_medico.repository.TurnosAten
 import com.example.microservicio_informacion_centro_medico.services.TurnosAtencionMedicaService;
 import com.example.microservicio_informacion_centro_medico.util.ApiResponse;
 
+import jakarta.annotation.security.PermitAll;
+
 
 @RestController
 @RequestMapping(path = "/horarios-atencion-medica")
@@ -35,6 +37,7 @@ public class TurnosAtencionMedicaController {
     @Autowired
     TurnosAtencionMedicaService turnosAtencionMedicaService;
     @PostMapping
+    @PermitAll
     public ResponseEntity<TurnoAtencionMedicaDto> registroHorarioAtencion(@RequestBody TurnoAtencionMedicaDto horariosAtencionMedicaEntity) {
         try {
             TurnoAtencionMedicaDto createdEntity = turnosAtencionMedicaService.crearHorarioAtencion(horariosAtencionMedicaEntity);
@@ -51,6 +54,7 @@ public class TurnosAtencionMedicaController {
     //     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Horario atencion no encontrado"));
     // }
     @DeleteMapping("/{idHorariosAtencionMedica}")
+    @PermitAll
     public ResponseEntity<Void> eliminarHorarioAtencion(@PathVariable int idHorariosAtencionMedica){ 
         try {
             turnosAtencionMedicaService.eliminarHorarioAtencion(idHorariosAtencionMedica);
@@ -65,6 +69,7 @@ public class TurnosAtencionMedicaController {
     //     return horariosAtencionMedicaRepositoryJPA.findAll();
     // }
     @GetMapping()
+    @PermitAll
     public ResponseEntity<List<TurnoAtencionMedicaDto>> obtenerHorariosAtencionDetalle(@RequestParam(required = false) String fechaInicio,@RequestParam(required = false) String fechaFin,@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer size){ 
         try {
             List<TurnoAtencionMedicaDto> detalles = turnosAtencionMedicaService.obtenerHorariosAtencionDetalle(fechaInicio,fechaFin,page,size);
@@ -75,6 +80,7 @@ public class TurnosAtencionMedicaController {
         }
     }
     @GetMapping("/{idHorariosAtencionMedica}")
+    @PermitAll
     public ResponseEntity<TurnoAtencionMedicaDto>  obtenerHorarioAtencionDetalle(@PathVariable int idHorariosAtencionMedica){ 
         try {
             TurnoAtencionMedicaDto detalle = turnosAtencionMedicaService.obtenerHorarioAtencionDetalle(idHorariosAtencionMedica);
@@ -87,6 +93,7 @@ public class TurnosAtencionMedicaController {
     Logger logger = LoggerFactory.getLogger(TurnosAtencionMedicaService.class);
 
     @GetMapping("/especialidades/{idEspecialidad}")
+    @PermitAll
     public ResponseEntity<List<TurnoAtencionMedicaDto>> obtenerTurnosAtencionMedicaDeEspecialidad(@PathVariable int idEspecialidad,@RequestParam(required = false) String fechaInicio,@RequestParam(required = false) String fechaFin,@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer size){
         try {
 

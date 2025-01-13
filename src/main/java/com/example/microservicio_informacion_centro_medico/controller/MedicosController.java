@@ -34,6 +34,7 @@ public class MedicosController {
     @Autowired
     MedicosService medicosService;
     @GetMapping
+    @PermitAll
     public ResponseEntity<List<MedicoDto>> listadoMedicos(@RequestParam(required = false) String nombreMedico,@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer size) {
         try {
              return new ResponseEntity<>(medicosService.obtenerEquipoMedico(nombreMedico,page, size), HttpStatus.OK);
@@ -42,8 +43,8 @@ public class MedicosController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PermitAll
     @GetMapping("/especialidades/{idEspecialidad}")
+    @PermitAll
     public ResponseEntity<List<MedicoDto>> listadoMedicosPorEspecialidad(@PathVariable(value = "idEspecialidad") Integer idEspecialidad,@RequestParam(required = false) String fechaInicio,@RequestParam(required = false) String fechaFin) {
         try{
             fechaInicio=fechaInicio==null?LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")):fechaInicio;

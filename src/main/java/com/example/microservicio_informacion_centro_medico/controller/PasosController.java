@@ -21,6 +21,8 @@ import com.example.microservicio_informacion_centro_medico.model.dtos.PasoDto;
 import com.example.microservicio_informacion_centro_medico.services.PasosService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.annotation.security.PermitAll;
+
 @RestController
 @RequestMapping("/v1.0/pasos")
 public class PasosController {
@@ -31,6 +33,7 @@ public class PasosController {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping
+    @PermitAll
     public ResponseEntity<List<PasoDto>> getPasos() {
         try {
             return new ResponseEntity<>(pasosService.obtenerPasos(), HttpStatus.OK);
@@ -41,6 +44,7 @@ public class PasosController {
     }
 
     @GetMapping("/{id}")
+    @PermitAll
     public ResponseEntity<PasoDto> getPasoById(@PathVariable int id) {
         try {
             PasoDto pasoDto = pasosService.obtenerPasoPorId(id);
@@ -52,6 +56,7 @@ public class PasosController {
     }
 
     @PostMapping
+    @PermitAll
     public ResponseEntity<PasoDto> createPaso(@RequestParam("data") String data,
         @RequestParam Map<String, MultipartFile> allFiles) {
         try {
@@ -65,6 +70,7 @@ public class PasosController {
     }
 
     @PutMapping("/{id}")
+    @PermitAll
     public ResponseEntity<PasoDto> updatePaso(@PathVariable int id, @RequestParam("data") String data,
         @RequestParam Map<String, MultipartFile> allFiles,@RequestParam Map<String, String> params) {
         try {
@@ -78,6 +84,7 @@ public class PasosController {
     }
 
     @DeleteMapping("/{id}")
+    @PermitAll
     public ResponseEntity<Void> deletePaso(@PathVariable int id) {
         try {
             pasosService.eliminarPaso(id);

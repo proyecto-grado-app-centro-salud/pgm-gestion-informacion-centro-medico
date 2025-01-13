@@ -23,6 +23,8 @@ import com.example.microservicio_informacion_centro_medico.services.PasosService
 import com.example.microservicio_informacion_centro_medico.services.RequisitosService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.annotation.security.PermitAll;
+
 @RestController
 @RequestMapping("/v1.0/requisitos")
 public class RequisitosController {
@@ -33,6 +35,7 @@ public class RequisitosController {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping
+    @PermitAll
     public ResponseEntity<List<RequisitoDto>> getRequisitos() {
         try {
             return new ResponseEntity<>(requisitosService.obtenerRequisitos(), HttpStatus.OK);
@@ -43,6 +46,7 @@ public class RequisitosController {
     }
 
     @GetMapping("/{id}")
+    @PermitAll
     public ResponseEntity<RequisitoDto> getRequisitoById(@PathVariable int id) {
         try {
             RequisitoDto requisitoDto = requisitosService.obtenerRequisitoPorId(id);
@@ -54,6 +58,7 @@ public class RequisitosController {
     }
 
     @PostMapping
+    @PermitAll
     public ResponseEntity<RequisitoDto> createPaso(@RequestParam("data") String data,
         @RequestParam Map<String, MultipartFile> allFiles) {
         try {
@@ -67,6 +72,7 @@ public class RequisitosController {
     }
 
     @PutMapping("/{id}")
+    @PermitAll
     public ResponseEntity<RequisitoDto> updatePaso(@PathVariable int id, @RequestParam("data") String data,
         @RequestParam Map<String, MultipartFile> allFiles,@RequestParam Map<String, String> params) {
         try {
@@ -80,6 +86,7 @@ public class RequisitosController {
     }
 
     @DeleteMapping("/{id}")
+    @PermitAll
     public ResponseEntity<Void> deletePaso(@PathVariable int id) {
         try {
             requisitosService.eliminarRequisito(id);

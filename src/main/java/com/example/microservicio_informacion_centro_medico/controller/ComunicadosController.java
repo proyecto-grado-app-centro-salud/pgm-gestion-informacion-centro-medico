@@ -22,6 +22,8 @@ import com.example.microservicio_informacion_centro_medico.model.dtos.Comunicado
 import com.example.microservicio_informacion_centro_medico.services.ComunicadosService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.annotation.security.PermitAll;
+
 @RestController
 @RequestMapping()   
 public class ComunicadosController {
@@ -32,6 +34,7 @@ public class ComunicadosController {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping(value = "/v1.0/comunicados")
+    @PermitAll
     public ResponseEntity<List<ComunicadoDto>> getComunicados(@RequestParam(required = false) String tituloComunicado,@RequestParam(required = false) Integer page,@RequestParam(required = false) Integer size) {
         try {
             return new ResponseEntity<>(comunicadosService.obtenerComunicados(tituloComunicado, page, size), HttpStatus.OK);
@@ -42,6 +45,7 @@ public class ComunicadosController {
     }
 
     @GetMapping(value = "/v1.0/comunicados/{id}")
+    @PermitAll
     public ResponseEntity<ComunicadoDto> getComunicadoById(@PathVariable int id) {
         try {
             ComunicadoDto comunicadoDto = comunicadosService.obtenerComunicadoPorId(id);
@@ -53,6 +57,7 @@ public class ComunicadosController {
     }
 
     @PostMapping(value = "/v1.0/comunicados")
+    @PermitAll
     public ResponseEntity<ComunicadoDto> createComunicado(@RequestParam("data") String data,@RequestParam Map<String, MultipartFile> allFiles) {
         try {
             ComunicadoDto comunicadoDto = objectMapper.readValue(data, ComunicadoDto.class);
@@ -65,6 +70,7 @@ public class ComunicadosController {
     }
 
     @PutMapping(value = "/v1.0/comunicados/{id}")
+    @PermitAll
     public ResponseEntity<ComunicadoDto> updateComunicado(@PathVariable int id, @RequestParam("data") String data,
     @RequestParam Map<String, MultipartFile> allFiles,@RequestParam Map<String, String> params) {
         try {
@@ -78,6 +84,7 @@ public class ComunicadosController {
     }
 
     @DeleteMapping(value = "/v1.0/comunicados/{id}")
+    @PermitAll
     public ResponseEntity<Void> deleteComunicado(@PathVariable int id) {
         try {
             comunicadosService.eliminarComunicado(id);
