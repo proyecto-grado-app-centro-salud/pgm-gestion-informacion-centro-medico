@@ -1,6 +1,8 @@
 package com.example.microservicio_informacion_centro_medico.services;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.microservicio_informacion_centro_medico.model.EspecialidadEntity;
 import com.example.microservicio_informacion_centro_medico.model.MedicoEntity;
+import com.example.microservicio_informacion_centro_medico.model.RolEntity;
 import com.example.microservicio_informacion_centro_medico.model.RolUsuarioEntity;
 import com.example.microservicio_informacion_centro_medico.model.TurnosAtencionMedicaEntity;
 import com.example.microservicio_informacion_centro_medico.model.UsuarioEntity;
@@ -22,6 +25,7 @@ import com.example.microservicio_informacion_centro_medico.model.dtos.Especialid
 import com.example.microservicio_informacion_centro_medico.model.dtos.MedicoDto;
 import com.example.microservicio_informacion_centro_medico.model.util.specifications.TurnosAtencionMedicaSpecification;
 import com.example.microservicio_informacion_centro_medico.repository.EspecialidadesRepositoryJPA;
+import com.example.microservicio_informacion_centro_medico.repository.RolesRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.repository.RolesUsuariosRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.repository.TurnosAtencionMedicaRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.repository.UsuarioRepositoryJPA;
@@ -35,17 +39,19 @@ public class MedicosService {
     @Autowired
     private UsuarioRepositoryJPA usuarioRepositoryJPA;
     @Autowired
+    private RolesRepositoryJPA rolesRepositoryJPA;
+    @Autowired
     private RolesUsuariosRepositoryJPA rolesUsuariosRepositoryJPA;
     @Autowired
     private ImagenesService imagenesService;
     @Autowired
     private TurnosAtencionMedicaRepositoryJPA turnosAtencionMedicaRepositoryJPA;
     public List<MedicoDto> obtenerMedicosEspecialitasPorEspecialidad(Integer idEspecialidad,String fechaInicio,String fechaFin) {
-        Date minDate,maxDate;
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        LocalDate minDate,maxDate;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {
-            minDate = formato.parse(fechaInicio);
-            maxDate = formato.parse(fechaFin);
+            minDate = LocalDate.parse(fechaInicio, formatter);
+            maxDate = LocalDate.parse(fechaFin, formatter);
         } catch (Exception e) {
             throw new RuntimeException("Fecha inválida");
         }
@@ -75,4 +81,16 @@ public class MedicosService {
         
         return especialidadesDtos;
     }   
+    public MedicoDto obtenerMedicoEspecialitas(String idMedico) {
+        RolEntity rolEntity = rolesRepositoryJPA.findById(2)
+        .orElseThrow(()-> new RuntimeException("Rol no encontrado"));
+        UsuarioEntity usuarioEntity = usuarioRepositoryJPA.findById(idMedico)
+        .orElseThrow(()-> new RuntimeException("Medico no encontrado"));
+        RolUsuarioEntity rolUsuarioEntity=rolesUsuariosRepositoryJPA.findOneByUsuarioAndRol(usuarioEntity,rolEntity)
+        .orElseThrow(()-> new RuntimeException("Rol usuario no encontrado"));
+        MedicoDto medicoDto = new MedicoDto().convertirRolUsuarioEntityAMedicoDto(rolUsuarioEntity);
+        medicoDto.setImagenes(imagenesService.obtenerImagenes("medicos", rolUsuarioEntity.getUsuario().getIdUsuario()));
+        return medicoDto;
+    }
+    
 }

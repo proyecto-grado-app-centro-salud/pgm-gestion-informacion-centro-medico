@@ -64,6 +64,10 @@ public class TurnosAtencionMedicaSpecification {
     //         // Parsear las fechas
     //         minDate = formato.parse(min);
     //         maxDate = formato.parse(max);
+    public static Specification<TurnosAtencionMedicaEntity> deletedAtIsNull() {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get("deletedAt"));
+    }
+
             
     //         // Unir entidades relacionadas
     //         Join<TurnosAtencionMedicaEntity, MedicoEntity> medicoJoin = root.join("medico");  // MedicoEntity relacionado con TurnosAtencionMedicaEntity

@@ -73,7 +73,7 @@ public class PasosProcedimientosElementosService {
         ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findOneByIdElementoAndTipoElementoAndProcedimiento(idElemento,tipoElemento,procedimientoEntity)
             .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
 
-        PasoEntity pasoEntity = pasosRepositoryJPA.findById(idPaso)
+        PasoEntity pasoEntity = pasosRepositoryJPA.findByIdPasoAndDeletedAtIsNull(idPaso)
         .orElseThrow(() -> new RuntimeException("Paso no encontrado"));
 
         ProcedimientoElementoPasoEntity procedimientoElementoPasoEntity = procedimientosElementosPasosRepositoryJPA.findOneByProcedimientoElementoAndPaso(procedimientoElementoEntity, pasoEntity)
@@ -92,7 +92,7 @@ public class PasosProcedimientosElementosService {
         ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findOneByIdElementoAndTipoElementoAndProcedimiento(idElemento,tipoElemento,procedimientoEntity)
             .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
 
-        PasoEntity pasoEntity = pasosRepositoryJPA.findById(idPaso)
+        PasoEntity pasoEntity = pasosRepositoryJPA.findByIdPasoAndDeletedAtIsNull(idPaso)
         .orElseThrow(() -> new RuntimeException("Paso no encontrado"));
 
         ProcedimientoElementoPasoEntity procedimientoElementoPasoEntity = new ProcedimientoElementoPasoEntity();

@@ -3,7 +3,6 @@ package com.example.microservicio_informacion_centro_medico.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.processing.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

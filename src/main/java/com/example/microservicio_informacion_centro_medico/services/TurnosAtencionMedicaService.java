@@ -23,6 +23,7 @@ import com.example.microservicio_informacion_centro_medico.model.TurnosAtencionM
 import com.example.microservicio_informacion_centro_medico.model.UsuarioEntity;
 import com.example.microservicio_informacion_centro_medico.model.dtos.TurnoAtencionMedicaDto;
 import com.example.microservicio_informacion_centro_medico.model.util.specifications.TurnosAtencionMedicaSpecification;
+import com.example.microservicio_informacion_centro_medico.model.util.specifications.TurnosSpecification;
 import com.example.microservicio_informacion_centro_medico.repository.ConsultoriosRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.repository.TurnosAtencionMedicaRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.repository.TurnosRepositoryJPA;
@@ -35,6 +36,9 @@ import org.springframework.data.domain.Page;
 public class TurnosAtencionMedicaService {
     @Autowired
     private TurnosAtencionMedicaRepositoryJPA turnosAtencionMedicaRepositoryJPA;
+
+    @Autowired
+    private ConsultasMedicasService consultasMedicasService;
     @Autowired
     private TurnosRepositoryJPA turnosRepositoryJPA;
     @Autowired
@@ -45,7 +49,7 @@ public class TurnosAtencionMedicaService {
     public TurnoAtencionMedicaDto crearHorarioAtencion(TurnoAtencionMedicaDto turnoAtencionMedicaDto) {
                 // SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        TurnoEntity turnoEntity = turnosRepositoryJPA.findById(turnoAtencionMedicaDto.getIdTurno())
+        TurnoEntity turnoEntity = turnosRepositoryJPA.findByIdTurnoAndDeletedAtIsNull(turnoAtencionMedicaDto.getIdTurno())
         .orElseThrow(() -> new RuntimeException("Turno no encontrado"));
         ConsultorioEntity consultorioEntity = consultoriosRepositoryJPA.findByIdConsultorioAndDeletedAtIsNull(turnoAtencionMedicaDto.getIdConsultorio())
         .orElseThrow(() -> new RuntimeException("Consultorio no encontrado"));
@@ -62,13 +66,18 @@ public class TurnosAtencionMedicaService {
         return new TurnoAtencionMedicaDto().convertirTurnoAtencionMedicaEntityTurnoAtencionMedicaDto(savedEntity);
     }
 
-    public void eliminarHorarioAtencion(int idHorariosAtencionMedica) {
-        turnosAtencionMedicaRepositoryJPA.deleteById(idHorariosAtencionMedica);
+    public void eliminarHorarioAtencion(int idHorariosAtencionMedica) throws Exception {
+        TurnosAtencionMedicaEntity turnosAtencionMedicaEntity = turnosAtencionMedicaRepositoryJPA.findByIdTurnoAtencionMedicaAndDeletedAtIsNull(idHorariosAtencionMedica).
+        orElseThrow(()->new Exception("Turno atencion medica no encontrado"));
+        
+        turnosAtencionMedicaEntity.markAsDeleted();
+        consultasMedicasService.eliminarConsultasMedicasDeTurnoAtencionMedica(idHorariosAtencionMedica);
+        turnosAtencionMedicaRepositoryJPA.save(turnosAtencionMedicaEntity);
     }
 
     public List<TurnoAtencionMedicaDto> obtenerHorariosAtencionDetalle(String fechaInicio, String fechaFin, Integer page, Integer size) {
         List<TurnosAtencionMedicaEntity>turnosAtencionMedicaEntities=new ArrayList<>();
-        Specification<TurnosAtencionMedicaEntity> spec = Specification.where(null);;
+        Specification<TurnosAtencionMedicaEntity> spec = Specification.where(TurnosAtencionMedicaSpecification.deletedAtIsNull());
         if(fechaInicio!=null){
             spec=spec.and(TurnosAtencionMedicaSpecification.greatherEqualThanFechaInicio(fechaInicio));
         }
@@ -89,7 +98,7 @@ public class TurnosAtencionMedicaService {
     }
 
     public TurnoAtencionMedicaDto obtenerHorarioAtencionDetalle(int idHorariosAtencionMedica) {
-        TurnosAtencionMedicaEntity turnosAtencionMedicaEntity = turnosAtencionMedicaRepositoryJPA.findById(idHorariosAtencionMedica)
+        TurnosAtencionMedicaEntity turnosAtencionMedicaEntity = turnosAtencionMedicaRepositoryJPA.findByIdTurnoAtencionMedicaAndDeletedAtIsNull(idHorariosAtencionMedica)
         .orElseThrow(() -> new RuntimeException("Turno atencion medica no encontrado"));
         return new TurnoAtencionMedicaDto().convertirTurnoAtencionMedicaEntityTurnoAtencionMedicaDto(turnosAtencionMedicaEntity);
     }
@@ -98,6 +107,7 @@ public class TurnosAtencionMedicaService {
         try{
             List<TurnosAtencionMedicaEntity>turnosAtencionMedicaEntities=new ArrayList<>();
             Specification<TurnosAtencionMedicaEntity> spec = Specification.where(TurnosAtencionMedicaSpecification.hasEspecialidadId(idEspecialidad));
+            spec=spec.and(TurnosAtencionMedicaSpecification.deletedAtIsNull());
             if(fechaInicio!=null){
                 spec=spec.and(TurnosAtencionMedicaSpecification.greatherEqualThanFechaInicio(fechaInicio));
             }
@@ -120,6 +130,11 @@ public class TurnosAtencionMedicaService {
             throw new RuntimeException(e.getMessage());
         }
 
+    }
+
+    public List<TurnosAtencionMedicaEntity> obtenerTurnosAtencionMedicaConsultorio(int idConsultorio) throws Exception {
+        ConsultorioEntity consultorioEntity = consultoriosRepositoryJPA.findByIdConsultorioAndDeletedAtIsNull(idConsultorio).orElseThrow(()->new Exception("Consultorio no encontrado"));
+        return turnosAtencionMedicaRepositoryJPA.findAllByConsultorioAndDeletedAtIsNull(consultorioEntity);
     }
 
     

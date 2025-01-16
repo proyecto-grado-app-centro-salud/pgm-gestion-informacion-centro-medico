@@ -79,7 +79,7 @@ public class RequisitosProcedimientosElementosService {
         ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findOneByIdElementoAndTipoElementoAndProcedimiento(idElemento,tipoElemento,procedimientoEntity)
             .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
 
-        RequisitoEntity requisitoEntity = requisitosRepositoryJPA.findById(idRequisito)
+        RequisitoEntity requisitoEntity = requisitosRepositoryJPA.findByIdRequisitoAndDeletedAtIsNull(idRequisito)
         .orElseThrow(() -> new RuntimeException("Requisito no encontrado"));
 
         ProcedimientoElementoRequisitoEntity procedimientoElementoRequisitoEntity = procedimientosElementosRequisitosRepositoryJPA.findOneByProcedimientoElementoAndRequisito(procedimientoElementoEntity, requisitoEntity)
@@ -99,7 +99,7 @@ public class RequisitosProcedimientosElementosService {
         ProcedimientoElementoEntity procedimientoElementoEntity = procedimientosElementosRepositoryJPA.findOneByIdElementoAndTipoElementoAndProcedimiento(idElemento,tipoElemento,procedimientoEntity)
             .orElseThrow(() -> new RuntimeException("Procedimiento elemento no encontrado"));
 
-        RequisitoEntity requisitoEntity = requisitosRepositoryJPA.findById(idRequisito)
+        RequisitoEntity requisitoEntity = requisitosRepositoryJPA.findByIdRequisitoAndDeletedAtIsNull(idRequisito)
         .orElseThrow(() -> new RuntimeException("Requisito no encontrado"));
 
         ProcedimientoElementoRequisitoEntity procedimientoElementoRequisitoEntity = new ProcedimientoElementoRequisitoEntity();

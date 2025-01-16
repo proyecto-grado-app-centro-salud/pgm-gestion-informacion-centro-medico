@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.microservicio_informacion_centro_medico.model.ConsultorioEntity;
 import com.example.microservicio_informacion_centro_medico.model.EspecialidadEntity;
+import com.example.microservicio_informacion_centro_medico.model.TurnosAtencionMedicaEntity;
 import com.example.microservicio_informacion_centro_medico.model.dtos.ConsultorioDto;
 import com.example.microservicio_informacion_centro_medico.repository.ConsultoriosRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.repository.EspecialidadesRepositoryJPA;
@@ -22,6 +23,8 @@ public class ConsultoriosService {
     EspecialidadesRepositoryJPA especialidadesRepositoryJPA;
     @Autowired
     ConsultoriosRepositoryJPA consultoriosRepositoryJPA;
+    @Autowired
+    TurnosAtencionMedicaService turnosAtencionMedicaService;
     @Autowired
     ImagenesService imagenesService;
     @Value(value = "${centro.salud.id}")
@@ -88,13 +91,19 @@ public class ConsultoriosService {
         return new ConsultorioDto().convertirConsultorioEntityAConsultorioDto(updatedEntity);
     }
 
-    public void eliminarConsultorio(int id) {
+    public void eliminarConsultorio(int id) throws Exception {
         ConsultorioEntity consultorioEntity = consultoriosRepositoryJPA.findByIdConsultorioAndDeletedAtIsNull(id)
         .orElseThrow(() -> new RuntimeException("Consultorio no encontrado"));
         consultorioEntity.markAsDeleted();
+        List<TurnosAtencionMedicaEntity> turnos=turnosAtencionMedicaService.obtenerTurnosAtencionMedicaConsultorio(id);
+        for(TurnosAtencionMedicaEntity turno:turnos){
+            turnosAtencionMedicaService.eliminarHorarioAtencion(turno.getIdTurnoAtencionMedica());
+        }
         consultoriosRepositoryJPA.save(consultorioEntity);
-
     }
 
-    
+    public List<ConsultorioEntity> obtenerConsultoriosDeEspecialidad(int idEspecialidad) throws Exception {
+        EspecialidadEntity especialidadEntity = especialidadesRepositoryJPA.findByIdEspecialidadAndDeletedAtIsNull(idEspecialidad).orElseThrow(()->new Exception("Especialidad no encontrada"));
+        return consultoriosRepositoryJPA.findAllByEspecialidad(especialidadEntity);
+    }
 }

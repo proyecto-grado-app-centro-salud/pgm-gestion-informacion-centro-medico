@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.microservicio_informacion_centro_medico.model.ConsultorioEntity;
 import com.example.microservicio_informacion_centro_medico.model.EspecialidadEntity;
 import com.example.microservicio_informacion_centro_medico.model.dtos.EspecialidadDto;
 import com.example.microservicio_informacion_centro_medico.repository.EspecialidadesRepositoryJPA;
@@ -24,6 +25,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public class EspecialidadesService {
     @Autowired
     EspecialidadesRepositoryJPA especialidadesRepositoryJPA;
+    @Autowired
+    ConsultoriosService consultoriosService;
     @Autowired
     ImagenesService imagenesService;
     public List<EspecialidadDto> obtenerEspecialidades(String nombreEspecialidad,Integer page, Integer size) throws JsonProcessingException {
@@ -82,10 +85,14 @@ public class EspecialidadesService {
         return new EspecialidadDto().convertirEspecialidadEntityAEspecialidadDto(updatedEntity);
     }
 
-    public void deleteEspecialidad(int id) {
+    public void deleteEspecialidad(int id) throws Exception {
         EspecialidadEntity especialidadEntity = especialidadesRepositoryJPA.findByIdEspecialidadAndDeletedAtIsNull(id)
-        .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));
+        .orElseThrow(() -> new Exception("Especialidad no encontrada"));
         especialidadEntity.markAsDeleted();
+        List<ConsultorioEntity> consultorios=consultoriosService.obtenerConsultoriosDeEspecialidad(id);
+        for(ConsultorioEntity consultorioEntity:consultorios){
+            consultoriosService.eliminarConsultorio(consultorioEntity.getIdConsultorio());
+        }
         especialidadesRepositoryJPA.save(especialidadEntity);
     }
 

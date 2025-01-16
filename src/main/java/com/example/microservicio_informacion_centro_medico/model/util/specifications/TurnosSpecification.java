@@ -11,6 +11,7 @@ public class TurnosSpecification {
             return (root, query, criteriaBuilder) -> {
                 Predicate predicateRango,predicateRetorno;
                 predicateRetorno = criteriaBuilder.conjunction();
+                predicateRetorno=criteriaBuilder.and(predicateRetorno,criteriaBuilder.isNull(root.get("deletedAt")));
                 if(horaInicio != null && horaFin != null){  
                     LocalTime inicio = LocalTime.parse(horaInicio);
                     LocalTime fin = LocalTime.parse(horaFin);

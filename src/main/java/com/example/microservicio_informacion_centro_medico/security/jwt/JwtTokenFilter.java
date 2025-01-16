@@ -35,8 +35,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 String ci = jwtProvider.getUserNameFromToken(token);
                 List<String> roles = jwtProvider.getRolesFromToken(token);
                 UserDetails userDetails = UserMain.build(ci,roles);
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication = 
+                        new UsernamePasswordAuthenticationToken(userDetails, token.startsWith("Bearer ") ? token.substring("Bearer ".length()) : token, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 logger.error("token valido final");
 

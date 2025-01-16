@@ -24,7 +24,7 @@ public class TurnosService {
     private TurnosRepositoryJPA turnosRepositoryJPA;
 
     public TurnoDto obtenerTurnoPorId(int idTurno) {
-        TurnoEntity turnoEntity = turnosRepositoryJPA.findById(idTurno)
+        TurnoEntity turnoEntity = turnosRepositoryJPA.findByIdTurnoAndDeletedAtIsNull(idTurno)
                 .orElseThrow(() -> new RuntimeException("Turno no encontrado"));
         return new TurnoDto().convertirTurnoEntityTurnoDto(turnoEntity);
     }
@@ -33,7 +33,7 @@ public class TurnosService {
     }
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
     public TurnoDto actualizarTurno(int idTurno, TurnoDto turnoDto) {
-        TurnoEntity turnoEntity = turnosRepositoryJPA.findById(idTurno)
+        TurnoEntity turnoEntity = turnosRepositoryJPA.findByIdTurnoAndDeletedAtIsNull(idTurno)
                 .orElseThrow(() -> new RuntimeException("Turno no encontrado"));
         
         turnoEntity.setNombre(turnoDto.getNombre());
