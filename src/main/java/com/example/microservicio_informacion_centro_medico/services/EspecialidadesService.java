@@ -1,5 +1,7 @@
 package com.example.microservicio_informacion_centro_medico.services;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +96,21 @@ public class EspecialidadesService {
             consultoriosService.eliminarConsultorio(consultorioEntity.getIdConsultorio());
         }
         especialidadesRepositoryJPA.save(especialidadEntity);
+    }
+
+
+    public List<EspecialidadDto> obtenerEspecialidadesDeMedico(String idMedico)  throws Exception{
+        LocalDate fechaInicio=LocalDate.now();
+        LocalDate fechaFin=LocalDate.now().plusMonths(1);
+
+        List<EspecialidadEntity>especialidadesMedico=especialidadesRepositoryJPA.obtenerEspecialidadesDeMedico(idMedico,fechaInicio,fechaFin);
+        List<EspecialidadDto> especialidadesDtos = new ArrayList<>();
+        for (EspecialidadEntity especialidadEntity : especialidadesMedico) {
+            EspecialidadDto especialidadDto=new EspecialidadDto().convertirEspecialidadEntityAEspecialidadDto(especialidadEntity);
+            especialidadDto.setImagenes(imagenesService.obtenerImagenes("especialidades", especialidadEntity.getIdEspecialidad()+""));
+            especialidadesDtos.add(especialidadDto);
+        }
+        return especialidadesDtos;
     }
 
 }

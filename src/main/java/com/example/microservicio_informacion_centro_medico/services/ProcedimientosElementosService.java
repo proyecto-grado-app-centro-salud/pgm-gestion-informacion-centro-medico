@@ -114,5 +114,17 @@ public class ProcedimientosElementosService {
                                            }).toList();
         return procedimientosElementosDtos;
     }
+
+    public  List<ProcedimientoDto> obtenerProcedimientosDeTipoElemento(String tipoElemento) {
+        List<ProcedimientoDto> procedimientosDtos = procedimientosElementosRepositoryJPA.obtenerProcedimientosDeTipoElemento(tipoElemento)
+                                          .stream()
+                                          .map(procedimientoEntity->{
+                                            ProcedimientoDto procedimientoDto = new ProcedimientoDto().convertirProcedimientoEntityAProcedimientoDto(procedimientoEntity); 
+                                            procedimientoDto.setImagenes(imagenesService.obtenerImagenes("procedimientos", procedimientoDto.getIdProcedimiento()+""));
+                                            return procedimientoDto;
+                                           })
+                                          .collect(Collectors.toList());
+        return procedimientosDtos;
+    }
     
 }

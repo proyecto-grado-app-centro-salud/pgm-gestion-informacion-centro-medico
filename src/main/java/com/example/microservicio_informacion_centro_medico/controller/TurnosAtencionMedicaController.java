@@ -38,15 +38,9 @@ public class TurnosAtencionMedicaController {
     TurnosAtencionMedicaService turnosAtencionMedicaService;
     @PostMapping
     @PermitAll
-    public ResponseEntity<TurnoAtencionMedicaDto> registroHorarioAtencion(@RequestBody TurnoAtencionMedicaDto horariosAtencionMedicaEntity) {
-        try {
-            TurnoAtencionMedicaDto createdEntity = turnosAtencionMedicaService.crearHorarioAtencion(horariosAtencionMedicaEntity);
-            return new ResponseEntity<>(createdEntity, HttpStatus.CREATED);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // logger.info(e.printStackTrace());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<TurnoAtencionMedicaDto> registroHorarioAtencion(@RequestBody TurnoAtencionMedicaDto horariosAtencionMedicaEntity) throws Exception {
+        TurnoAtencionMedicaDto createdEntity = turnosAtencionMedicaService.crearHorarioAtencion(horariosAtencionMedicaEntity);
+        return new ResponseEntity<>(createdEntity, HttpStatus.CREATED);
     }
     // @GetMapping("/{idHorariosAtencionMedica}")
     // public @ResponseBody HorariosAtencionMedicaEntity obtenerHorarioAtencion(@PathVariable int idHorariosAtencionMedica){

@@ -22,6 +22,13 @@ public interface ProcedimientosElementosRepositoryJPA extends JpaRepository<Proc
         @Param("idElemento") Integer idElemento);
 
 
+    @Query("SELECT DISTINCT pa FROM ProcedimientoElementoEntity pe " +
+        "INNER JOIN pe.procedimiento pa " +
+        "WHERE pe.tipoElemento = :tipoElemento " +
+        "AND pa.deletedAt IS NULL")
+    List<ProcedimientoEntity> obtenerProcedimientosDeTipoElemento(String tipoElemento);
+
+
     Optional<ProcedimientoElementoEntity> findOneByIdElementoAndTipoElementoAndProcedimiento(int idElemento, String tipoElemento, ProcedimientoEntity procedimiento);
 
 
@@ -53,4 +60,6 @@ public interface ProcedimientosElementosRepositoryJPA extends JpaRepository<Proc
     "(pe.tipoElemento = 'consultorios' AND c.idConsultorio IS NOT NULL))")
 
     List<ProcedimientoElementoDto> findAllProcedimientoElementoByIdProcedimiento(@Param("idProcedimiento") int idProcedimiento);
+
+
 }

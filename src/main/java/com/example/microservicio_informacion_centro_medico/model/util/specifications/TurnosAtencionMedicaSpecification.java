@@ -67,6 +67,54 @@ public class TurnosAtencionMedicaSpecification {
     public static Specification<TurnosAtencionMedicaEntity> deletedAtIsNull() {
         return (root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get("deletedAt"));
     }
+    public static Specification obtenerHorariosAtencionDeMedico(String idMedico, LocalDate minDate,
+            LocalDate maxDate) {
+        try {
+            return (root,query,builder) -> { 
+                Join<TurnosAtencionMedicaEntity, MedicoEntity> medicoJoin = root.join("medico");
+
+                Predicate predicadoFinal = builder.isNull(root.get("deletedAt"));
+                predicadoFinal = builder.and(predicadoFinal, builder.equal(medicoJoin.get("idUsuario"),idMedico));
+
+                if (minDate != null) {
+                    Predicate predicadoFechaMin = builder.greaterThanOrEqualTo(root.get("fecha"), minDate);
+                    predicadoFinal = builder.and(predicadoFinal, predicadoFechaMin);
+                }
+                if (maxDate != null) {
+                    Predicate predicadoFechaMax = builder.lessThanOrEqualTo(root.get("fecha"), maxDate);
+                    predicadoFinal = builder.and(predicadoFinal, predicadoFechaMax);
+                }
+                
+                return predicadoFinal;
+            };
+        } catch (Exception e) {
+            throw new RuntimeException("Error obtener notas evo por parametros");
+        }
+    }
+    public static Specification obtenerHorariosAtencionDeConsultorio(int idConsultorio,
+            LocalDate minDate, LocalDate maxDate) {
+                try {
+                    return (root,query,builder) -> { 
+                        Join<TurnosAtencionMedicaEntity, ConsultorioEntity> consultorioJoin = root.join("consultorio");
+        
+                        Predicate predicadoFinal = builder.isNull(root.get("deletedAt"));
+                        predicadoFinal = builder.and(predicadoFinal, builder.equal(consultorioJoin.get("idConsultorio"),idConsultorio));
+        
+                        if (minDate != null) {
+                            Predicate predicadoFechaMin = builder.greaterThanOrEqualTo(root.get("fecha"), minDate);
+                            predicadoFinal = builder.and(predicadoFinal, predicadoFechaMin);
+                        }
+                        if (maxDate != null) {
+                            Predicate predicadoFechaMax = builder.lessThanOrEqualTo(root.get("fecha"), maxDate);
+                            predicadoFinal = builder.and(predicadoFinal, predicadoFechaMax);
+                        }
+                        
+                        return predicadoFinal;
+                    };
+                } catch (Exception e) {
+                    throw new RuntimeException("Error obtener notas evo por parametros");
+                }
+    }
 
             
     //         // Unir entidades relacionadas

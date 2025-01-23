@@ -44,6 +44,18 @@ public class ProcedimientosElementosPublicController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }   
     }
+    @GetMapping(value = "/elementos/tipo-elemento/{tipoElemento}")
+    @PermitAll
+    public ResponseEntity<List<ProcedimientoDto>> getProcedimientosDeTipoElemento(@PathVariable String tipoElemento) {
+        try {
+            return new ResponseEntity<>(procedimientosElementosService.obtenerProcedimientosDeTipoElemento(tipoElemento), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            new RuntimeException(e);
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }   
+    }
     @GetMapping(value = "/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}")
     @PermitAll
     public ResponseEntity<ProcedimientoDto> getProcedimientoDeElemento(@PathVariable int idProcedimiento,@PathVariable int idElemento,@PathVariable String tipoElemento) {

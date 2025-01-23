@@ -61,6 +61,7 @@ public class MedicoDto {
         this.direccion=rolUsuarioEntity.getUsuario().getDireccion();
         this.celular=rolUsuarioEntity.getUsuario().getCelular();
         this.email=rolUsuarioEntity.getUsuario().getEmail();
+        this.aniosExperiencia=rolUsuarioEntity.getAniosExperiencia()==null?0:rolUsuarioEntity.getAniosExperiencia();
         return this;
     }
 }

@@ -67,4 +67,14 @@ public class EspecialidadesPublicController {
 
         }
     }
+    @GetMapping(value = "/medico/{idMedico}")
+    @PermitAll
+    public ResponseEntity<List<EspecialidadDto>> obtenerEspecialidadesDeMedico(@PathVariable String idMedico) {
+        try {
+            return new ResponseEntity<>(especialidadesService.obtenerEspecialidadesDeMedico(idMedico), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

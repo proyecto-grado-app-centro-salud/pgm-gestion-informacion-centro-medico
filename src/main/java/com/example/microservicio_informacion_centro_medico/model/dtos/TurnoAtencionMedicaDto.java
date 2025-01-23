@@ -32,7 +32,7 @@ public class TurnoAtencionMedicaDto {
     private String nombreMedico;
     private Integer idEspecialidad;
     private String nombreEspecialidad;
-    public TurnoAtencionMedicaDto convertirTurnoAtencionMedicaEntityTurnoAtencionMedicaDto(TurnosAtencionMedicaEntity turnoAtencionMedicaEntity){
+    public static TurnoAtencionMedicaDto convertirTurnoAtencionMedicaEntityTurnoAtencionMedicaDto(TurnosAtencionMedicaEntity turnoAtencionMedicaEntity){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         TurnoAtencionMedicaDto turnoAtencionMedicaDto=new TurnoAtencionMedicaDto();
         turnoAtencionMedicaDto.setIdTurnoAtencionMedica(turnoAtencionMedicaEntity.getIdTurnoAtencionMedica());
