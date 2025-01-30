@@ -1,7 +1,7 @@
 version: 0.2
 env:
   variables:
-    ECR_REPO_NAME: microservicio-gestion-informacion-centro-medico
+    ECR_REPO_NAME: microservicio-historias-clinicas 
 phases:
   pre_build:
     commands:
@@ -15,12 +15,12 @@ phases:
       - ECR_IMAGE_URI="${ECR_MAIN_URI}/${ECR_REPO_NAME}:latest"
   build:
     commands:
-      - docker build -t microservicio-gestion-informacion-centro-medico:latest .
+      - docker build -t microservicio-historias-clinicas:latest .
   post_build:
     commands:
-      - docker tag microservicio-gestion-informacion-centro-medico:latest ${ECR_IMAGE_URI}
+      - docker tag microservicio-historias-clinicas:latest ${ECR_IMAGE_URI}
       - docker push ${ECR_IMAGE_URI}
-      - printf '[{"name":"microservicio-gestion-informacion-centro-medico","imageUri":"%s"}]' ${ECR_IMAGE_URI} > imagedefinitions.json
+      - printf '[{"name":"microservicio-historias-clinicas","imageUri":"%s"}]' ${ECR_IMAGE_URI} > imagedefinitions.json
       
 artifacts:
   files:
