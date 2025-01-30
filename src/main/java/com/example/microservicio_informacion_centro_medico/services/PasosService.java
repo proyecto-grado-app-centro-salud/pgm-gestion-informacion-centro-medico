@@ -72,7 +72,6 @@ public class PasosService {
     public void eliminarPaso(int id) {
         PasoEntity pasoEntity = pasosRepositoryJPA.findByIdPasoAndDeletedAtIsNull(id)
             .orElseThrow(() -> new RuntimeException("Paso no encontrado"));
-        pasoEntity.markAsDeleted();
-        pasosRepositoryJPA.save(pasoEntity);
+        pasosRepositoryJPA.delete(pasoEntity);
     }
 }

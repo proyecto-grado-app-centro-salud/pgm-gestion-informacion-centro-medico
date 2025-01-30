@@ -57,10 +57,12 @@ public class MedicosService {
         }
         EspecialidadEntity especialidad = especialidadesRepositoryJPA.findByIdEspecialidadAndDeletedAtIsNull(idEspecialidad).orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));
         List<UsuarioEntity>usuarioEntities=turnosAtencionMedicaRepositoryJPA.findAllMedicosDeEspecialidadEnTurnosDeAtencionMedica(idEspecialidad, minDate, maxDate);
-        List<MedicoDto> medicosDtos = usuarioEntities.stream()
-        .map(medico -> new MedicoDto().convertirUsuarioEntityAMedicoDto(medico))
-        .toList();
-        return medicosDtos;
+        List<MedicoDto> especialidadesDtos = usuarioEntities.stream().map((rolUsuarioEntities) -> {
+            MedicoDto medicoDto = new MedicoDto().convertirUsuarioEntityAMedicoDto(rolUsuarioEntities);
+            medicoDto.setImagenes(imagenesService.obtenerImagenes("usuarios", rolUsuarioEntities.getIdUsuario()+""));
+            return medicoDto;
+        }).toList();
+        return especialidadesDtos;
     }
     public List<MedicoDto> obtenerEquipoMedico(String nombreMedico, Integer page, Integer size) {
         List<RolUsuarioEntity>rolesUsuariosEntities=new ArrayList<>();
@@ -75,7 +77,7 @@ public class MedicosService {
         
         List<MedicoDto> especialidadesDtos = rolesUsuariosEntities.stream().map((rolUsuarioEntities) -> {
             MedicoDto medicoDto = new MedicoDto().convertirRolUsuarioEntityAMedicoDto(rolUsuarioEntities);
-            medicoDto.setImagenes(imagenesService.obtenerImagenes("roles-usuarios", rolUsuarioEntities.getIdUsuarioRol()+""));
+            medicoDto.setImagenes(imagenesService.obtenerImagenes("usuarios", rolUsuarioEntities.getUsuario().getIdUsuario()+""));
             return medicoDto;
         }).toList();
         
@@ -89,7 +91,7 @@ public class MedicosService {
         RolUsuarioEntity rolUsuarioEntity=rolesUsuariosRepositoryJPA.findOneByUsuarioAndRol(usuarioEntity,rolEntity)
         .orElseThrow(()-> new RuntimeException("Rol usuario no encontrado"));
         MedicoDto medicoDto = new MedicoDto().convertirRolUsuarioEntityAMedicoDto(rolUsuarioEntity);
-        medicoDto.setImagenes(imagenesService.obtenerImagenes("medicos", rolUsuarioEntity.getUsuario().getIdUsuario()));
+        medicoDto.setImagenes(imagenesService.obtenerImagenes("usuarios", rolUsuarioEntity.getUsuario().getIdUsuario()));
         return medicoDto;
     }
     

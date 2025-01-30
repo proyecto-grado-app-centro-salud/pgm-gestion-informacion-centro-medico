@@ -108,4 +108,9 @@ public class EspecialidadesController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/info")
+    @PermitAll
+    public ResponseEntity<String> ultimaActualizacion() {
+        return new ResponseEntity<String>("012922025",HttpStatus.OK);
+    }
 }

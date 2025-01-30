@@ -23,13 +23,23 @@ public class TurnosService {
     @Autowired
     private TurnosRepositoryJPA turnosRepositoryJPA;
 
+    @Autowired
+    private TurnosAtencionMedicaService turnosAtencionMedicaService;
+
     public TurnoDto obtenerTurnoPorId(int idTurno) {
         TurnoEntity turnoEntity = turnosRepositoryJPA.findByIdTurnoAndDeletedAtIsNull(idTurno)
                 .orElseThrow(() -> new RuntimeException("Turno no encontrado"));
         return new TurnoDto().convertirTurnoEntityTurnoDto(turnoEntity);
     }
-    public void eliminarTurno(int idTurno) {
-        turnosRepositoryJPA.deleteById(idTurno);
+    public void eliminarTurno(int idTurno) throws Exception {
+        TurnoEntity turnoEntity = turnosRepositoryJPA.findByIdTurnoAndDeletedAtIsNull(idTurno)
+                .orElseThrow(() -> new RuntimeException("Turno no encontrado"));
+        turnoEntity.markAsDeleted();
+        List<TurnosAtencionMedicaEntity> turnos=turnosAtencionMedicaService.obtenerTurnosAtencionMedicaDeTurno(idTurno);
+        for(TurnosAtencionMedicaEntity turno:turnos){
+            turnosAtencionMedicaService.eliminarHorarioAtencion(turno.getIdTurnoAtencionMedica());
+        }
+        turnosRepositoryJPA.save(turnoEntity);
     }
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
     public TurnoDto actualizarTurno(int idTurno, TurnoDto turnoDto) {

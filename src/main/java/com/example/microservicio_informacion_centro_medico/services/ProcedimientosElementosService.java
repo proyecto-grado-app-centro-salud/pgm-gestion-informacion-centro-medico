@@ -1,6 +1,7 @@
 package com.example.microservicio_informacion_centro_medico.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.example.microservicio_informacion_centro_medico.model.ProcedimientoEn
 import com.example.microservicio_informacion_centro_medico.model.dtos.PasoDto;
 import com.example.microservicio_informacion_centro_medico.model.dtos.ProcedimientoDto;
 import com.example.microservicio_informacion_centro_medico.model.dtos.ProcedimientoElementoDto;
+import com.example.microservicio_informacion_centro_medico.model.util.exceptions.BusinessValidationException;
 import com.example.microservicio_informacion_centro_medico.model.util.ids_embebidos.ProcedimientoElementoId;
 import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosElementosRepositoryJPA;
 import com.example.microservicio_informacion_centro_medico.repository.ProcedimientosRepositoryJPA;
@@ -35,11 +37,15 @@ public class ProcedimientosElementosService {
 
     public void crearProcedimientoElemento(int idProcedimiento, int idElemento, String tipoElemento,@RequestParam("data") ProcedimientoElementoDto procedimientoElementoDto) throws JsonProcessingException {
 
+        
         ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(idProcedimiento)
         .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
 
-        verificarExisteciaElemento(idElemento,tipoElemento);
+        Optional<ProcedimientoElementoEntity> procedimientoElementoEncontradoEntity = procedimientosElementosRepositoryJPA.findOneByIdElementoAndTipoElementoAndProcedimiento(idElemento,tipoElemento,procedimientoEntity);
+        if(procedimientoElementoEncontradoEntity.isPresent()) throw new BusinessValidationException("El procedimiento ya fue añadido al elemento");
 
+
+        verificarExisteciaElemento(idElemento,tipoElemento);
 
         ProcedimientoElementoEntity procedimientoElementoEntity = new ProcedimientoElementoEntity();        
         procedimientoElementoEntity.setIdElemento(idElemento);

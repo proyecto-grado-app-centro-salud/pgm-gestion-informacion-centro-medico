@@ -189,5 +189,8 @@ public class TurnosAtencionMedicaService {
         return turnosAtencionMedicaRepositoryJPA.findAllByConsultorioAndDeletedAtIsNull(consultorioEntity);
     }
 
-    
+    public List<TurnosAtencionMedicaEntity> obtenerTurnosAtencionMedicaDeTurno(int idTurno) throws Exception {
+        TurnoEntity turnoEntity = turnosRepositoryJPA.findByIdTurnoAndDeletedAtIsNull(idTurno).orElseThrow(()->new Exception("Turno no encontrado"));
+        return turnosAtencionMedicaRepositoryJPA.findAllByTurnoAndDeletedAtIsNull(turnoEntity);
+    }
 }

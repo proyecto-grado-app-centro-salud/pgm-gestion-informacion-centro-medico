@@ -21,6 +21,7 @@ import com.example.microservicio_informacion_centro_medico.model.dtos.Procedimie
 import com.example.microservicio_informacion_centro_medico.model.dtos.ProcedimientoElementoDto;
 import com.example.microservicio_informacion_centro_medico.services.PasosProcedimientosElementosService;
 import com.example.microservicio_informacion_centro_medico.services.ProcedimientosElementosService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.annotation.security.PermitAll;
@@ -71,15 +72,10 @@ public class ProcedimientosElementosController {
 
     @PostMapping(value = "/{idProcedimiento}/tipo-elemento/{tipoElemento}/elementos/{idElemento}")
     @PermitAll
-    public ResponseEntity<Void> createProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idElemento,@PathVariable String tipoElemento, @RequestParam("data") String data) {
-        try {
-            ProcedimientoElementoDto procedimientoElementoDto = objectMapper.readValue(data, ProcedimientoElementoDto.class);
+    public ResponseEntity<Void> createProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idElemento,@PathVariable String tipoElemento, @RequestParam("data") String data) throws JsonProcessingException {
+        ProcedimientoElementoDto procedimientoElementoDto = objectMapper.readValue(data, ProcedimientoElementoDto.class);
             procedimientosElementosService.crearProcedimientoElemento(idProcedimiento, idElemento, tipoElemento,procedimientoElementoDto);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     @DeleteMapping("/{idProcedimiento}/tipo-elemento/{tipoElemento}/elementos/{idElemento}")

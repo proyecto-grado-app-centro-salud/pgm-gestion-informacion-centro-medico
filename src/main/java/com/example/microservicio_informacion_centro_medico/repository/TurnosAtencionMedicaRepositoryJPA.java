@@ -52,5 +52,8 @@ public interface TurnosAtencionMedicaRepositoryJPA extends JpaRepository<TurnosA
 
     List<TurnosAtencionMedicaEntity> findAllByConsultorioAndDeletedAtIsNull(ConsultorioEntity consultorio);
 
+    List<TurnosAtencionMedicaEntity> findAllByTurnoAndDeletedAtIsNull(TurnoEntity turno);
+
+
     Optional<TurnosAtencionMedicaEntity> findByIdTurnoAtencionMedicaAndDeletedAtIsNull(int idHorariosAtencionMedica);
 }

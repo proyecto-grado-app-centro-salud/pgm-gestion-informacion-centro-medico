@@ -74,8 +74,7 @@ public class RequisitosService {
     public void eliminarRequisito(int id) {
         RequisitoEntity requisitoEntity = requisitosRepositoryJPA.findByIdRequisitoAndDeletedAtIsNull(id)
         .orElseThrow(() -> new RuntimeException("Requisito no encontrado"));
-        requisitoEntity.markAsDeleted();
-        requisitosRepositoryJPA.save(requisitoEntity);
+        requisitosRepositoryJPA.delete(requisitoEntity);
     }
         
 }

@@ -82,7 +82,6 @@ public class ProcedimientosService {
     public void eliminarProcedimiento(int id) {
         ProcedimientoEntity procedimientoEntity = procedimientosRepositoryJPA.findByIdProcedimientoAndDeletedAtIsNull(id)
             .orElseThrow(() -> new RuntimeException("Procedimiento no encontrado"));
-        procedimientoEntity.markAsDeleted();
-        procedimientosRepositoryJPA.save(procedimientoEntity);
+        procedimientosRepositoryJPA.delete(procedimientoEntity);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.microservicio_informacion_centro_medico.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import com.example.microservicio_informacion_centro_medico.model.ProcedimientoEl
 import com.example.microservicio_informacion_centro_medico.model.dtos.PasoDto;
 import com.example.microservicio_informacion_centro_medico.model.dtos.ProcedimientoDto;
 import com.example.microservicio_informacion_centro_medico.model.dtos.RequisitoDto;
+import com.example.microservicio_informacion_centro_medico.model.util.exceptions.BusinessValidationException;
 import com.example.microservicio_informacion_centro_medico.model.util.ids_embebidos.ProcedimientoElementoId;
 import com.example.microservicio_informacion_centro_medico.model.util.ids_embebidos.ProcedimientoElementoPasoId;
 import com.example.microservicio_informacion_centro_medico.repository.PasosRepositoryJPA;
@@ -95,6 +97,10 @@ public class PasosProcedimientosElementosService {
         PasoEntity pasoEntity = pasosRepositoryJPA.findByIdPasoAndDeletedAtIsNull(idPaso)
         .orElseThrow(() -> new RuntimeException("Paso no encontrado"));
 
+        Optional<ProcedimientoElementoPasoEntity> procedimientoElementoPasoEncontradoEntity = procedimientosElementosPasosRepositoryJPA.findOneByProcedimientoElementoAndPaso(procedimientoElementoEntity, pasoEntity);
+        if(procedimientoElementoPasoEncontradoEntity.isPresent()) throw new BusinessValidationException("El paso ya fue añadido al elemento");
+
+        
         ProcedimientoElementoPasoEntity procedimientoElementoPasoEntity = new ProcedimientoElementoPasoEntity();
         procedimientoElementoPasoEntity.setPaso(pasoEntity);
         procedimientoElementoPasoEntity.setProcedimientoElemento(procedimientoElementoEntity);
