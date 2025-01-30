@@ -15,15 +15,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.microservicio_informacion_centro_medico.model.dtos.PasoDto;
 import com.example.microservicio_informacion_centro_medico.model.dtos.ProcedimientoDto;
+import com.example.microservicio_informacion_centro_medico.model.dtos.RequisitoDto;
 import com.example.microservicio_informacion_centro_medico.services.PasosProcedimientosElementosService;
 import com.example.microservicio_informacion_centro_medico.services.ProcedimientosService;
+import com.example.microservicio_informacion_centro_medico.services.RequisitosProcedimientosElementosService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -32,36 +33,36 @@ import jakarta.annotation.security.PermitAll;
 @RestController
 @RequestMapping("/v1.0/procedimientos")
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.DELETE, RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,RequestMethod.OPTIONS})
-public class PasosProcedimientosElementosController {
+public class RequisitosProcedimientosElementosController {
     @Autowired
-    private PasosProcedimientosElementosService pasosProcedimientosService;
+    private RequisitosProcedimientosElementosService requisitosProcedimientosElementosService;
     private static final Logger logger = LoggerFactory.getLogger(PasosProcedimientosElementosController.class);
-    @GetMapping(value = "/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/pasos")
+    @GetMapping(value = "/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/requisitos")
     @PermitAll
-    public ResponseEntity<List<PasoDto>> getPasosProcedimiento(@PathVariable int idProcedimiento,@PathVariable int idElemento,@PathVariable String tipoElemento) {
+    public ResponseEntity<List<RequisitoDto>> getPasosProcedimiento(@PathVariable int idProcedimiento,@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
-            return new ResponseEntity<>(pasosProcedimientosService.obtenerPasosDeProcedimiento(idProcedimiento,idElemento,tipoElemento), HttpStatus.OK);
+            return new ResponseEntity<>(requisitosProcedimientosElementosService.obtenerRequisitosDeProcedimientoElemento(idProcedimiento,idElemento,tipoElemento), HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
             logger.info(e.getMessage());
             new RuntimeException(e);
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
 
-    @PostMapping(value = "/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/pasos/{idPaso}")
+    @PostMapping(value = "/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/requisitos/{idRequisito}")
     @PermitAll
-    public ResponseEntity<Void> createPasoProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idPaso,@PathVariable int idElemento,@PathVariable String tipoElemento) throws JsonProcessingException {
-        pasosProcedimientosService.crearPasoProcedimientoElemento(idProcedimiento, idPaso, idElemento, tipoElemento);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Void> createRequisitoProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idRequisito,@PathVariable int idElemento,@PathVariable String tipoElemento) throws JsonProcessingException {
+        requisitosProcedimientosElementosService.crearRequisitoProcedimientoElemento(idProcedimiento, idRequisito, idElemento, tipoElemento);
+            return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/pasos/{idPaso}")
+    @DeleteMapping("/{idProcedimiento}/elementos/{idElemento}/tipo-elemento/{tipoElemento}/requisitos/{idRequisito}")
     @PermitAll
-    public ResponseEntity<Void> deletePasoProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idPaso,@PathVariable int idElemento,@PathVariable String tipoElemento) {
+    public ResponseEntity<Void> deleteRequisitoProcedimientoElemento(@PathVariable int idProcedimiento,@PathVariable int idRequisito,@PathVariable int idElemento,@PathVariable String tipoElemento) {
         try {
-            pasosProcedimientosService.eliminarPasoProcedimientoElemento(idProcedimiento,idPaso,idElemento,tipoElemento);
+            requisitosProcedimientosElementosService.eliminarRequisitoProcedimientoElemento(idProcedimiento,idRequisito,idElemento,tipoElemento);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

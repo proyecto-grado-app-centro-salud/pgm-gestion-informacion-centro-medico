@@ -33,6 +33,7 @@ import jakarta.annotation.security.PermitAll;
 
 @RestController
 @RequestMapping(path = "/consultorios")
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.DELETE, RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,RequestMethod.OPTIONS})
 public class ConsultoriosController {
 
     @Autowired

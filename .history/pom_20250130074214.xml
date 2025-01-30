@@ -89,6 +89,7 @@
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 
+		
 <!-- spring security -->
 		
 		<dependency>
@@ -130,10 +131,6 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-    <groupId>jakarta.ws.rs</groupId>
-    <artifactId>jakarta.ws.rs-api</artifactId>
-</dependency>
 	</dependencies>
 	<!-- <dependencyManagement>
 		<dependencies>

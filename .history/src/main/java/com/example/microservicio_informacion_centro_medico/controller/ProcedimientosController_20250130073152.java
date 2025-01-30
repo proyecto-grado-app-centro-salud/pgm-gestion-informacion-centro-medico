@@ -1,8 +1,9 @@
 package com.example.microservicio_informacion_centro_medico.controller;
-
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,33 +15,32 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.microservicio_informacion_centro_medico.model.dtos.PasoDto;
-import com.example.microservicio_informacion_centro_medico.model.dtos.RequisitoDto;
-import com.example.microservicio_informacion_centro_medico.services.PasosService;
-import com.example.microservicio_informacion_centro_medico.services.RequisitosService;
+import com.example.microservicio_informacion_centro_medico.model.dtos.ProcedimientoDto;
+import com.example.microservicio_informacion_centro_medico.services.ProcedimientosService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.annotation.security.PermitAll;
 
 @RestController
-@RequestMapping("/v1.0/requisitos")
+@RequestMapping("/v1.0/procedimientos")
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.DELETE, RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,RequestMethod.OPTIONS})
-public class RequisitosController {
+public class ProcedimientosController {
 
     @Autowired
-    private RequisitosService requisitosService;
+    private ProcedimientosService procedimientosService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    private final Logger logger = LoggerFactory.getLogger(ProcedimientosController.class);
+
     @GetMapping
     @PermitAll
-    public ResponseEntity<List<RequisitoDto>> getRequisitos() {
+    public ResponseEntity<List<ProcedimientoDto>> getProcedimientos() {
         try {
-            return new ResponseEntity<>(requisitosService.obtenerRequisitos(), HttpStatus.OK);
+            return new ResponseEntity<>(procedimientosService.obtenerProcedimientos(), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -49,10 +49,10 @@ public class RequisitosController {
 
     @GetMapping("/{id}")
     @PermitAll
-    public ResponseEntity<RequisitoDto> getRequisitoById(@PathVariable int id) {
+    public ResponseEntity<ProcedimientoDto> getProcedimientoById(@PathVariable int id) {
         try {
-            RequisitoDto requisitoDto = requisitosService.obtenerRequisitoPorId(id);
-            return new ResponseEntity<>(requisitoDto, HttpStatus.OK);
+            ProcedimientoDto procedimientoDto = procedimientosService.obtenerProcedimientoPorId(id);
+            return new ResponseEntity<>(procedimientoDto, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -61,40 +61,43 @@ public class RequisitosController {
 
     @PostMapping
     @PermitAll
-    public ResponseEntity<RequisitoDto> createPaso(@RequestParam("data") String data,
+    public ResponseEntity<ProcedimientoDto> createProcedimiento(@RequestParam("data") String data,
         @RequestParam Map<String, MultipartFile> allFiles) {
         try {
-            RequisitoDto requisitoDto = objectMapper.readValue(data, RequisitoDto.class);
-            RequisitoDto createdRequisito = requisitosService.crearRequisito(requisitoDto, allFiles);
-            return new ResponseEntity<>(createdRequisito, HttpStatus.CREATED);
+            ProcedimientoDto procedimientoDto = objectMapper.readValue(data, ProcedimientoDto.class);
+            ProcedimientoDto createdProcedimiento = procedimientosService.crearProcedimiento(procedimientoDto, allFiles);
+            return new ResponseEntity<>(createdProcedimiento, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/{id}")
     @PermitAll
-    public ResponseEntity<RequisitoDto> updatePaso(@PathVariable int id, @RequestParam("data") String data,
-        @RequestParam Map<String, MultipartFile> allFiles,@RequestParam Map<String, String> params) {
+    public ResponseEntity<ProcedimientoDto> updateProcedimiento(@PathVariable int id, @RequestParam("data") String data,
+        @RequestParam Map<String, MultipartFile> allFiles, @RequestParam Map<String, String> params) {
         try {
-            RequisitoDto requisitoDto = objectMapper.readValue(data, RequisitoDto.class);
-            RequisitoDto updatedRequisito = requisitosService.actualizarRequisito(id, requisitoDto, allFiles,params);
-            return new ResponseEntity<>(updatedRequisito, HttpStatus.OK);
+            ProcedimientoDto procedimientoDto = objectMapper.readValue(data, ProcedimientoDto.class);
+            ProcedimientoDto updatedProcedimiento = procedimientosService.actualizarProcedimiento(id, procedimientoDto, allFiles, params);
+            return new ResponseEntity<>(updatedProcedimiento, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping("/{id}")
     @PermitAll
-    public ResponseEntity<Void> deletePaso(@PathVariable int id) {
+    public ResponseEntity<Void> deleteProcedimiento(@PathVariable int id) {
         try {
-            requisitosService.eliminarRequisito(id);
+            procedimientosService.eliminarProcedimiento(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
